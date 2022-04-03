@@ -28,15 +28,14 @@ function App() {
         navigateTo('/')
         break;
       case 1: 
-        navigateTo('/moment')
+        navigateTo('/chat')
         break;
       case 2:
-        navigateTo('/chat')
+        navigateTo('/moment')
         break;
       case 3:
         navigateTo('/search')
       default:
-
         break;
     }
   }
@@ -45,14 +44,17 @@ function App() {
   return (
     <div className={classes.box}>
       <div className={classes.main}>
-        <Routes>
-          <Route path="/" element={<Outlet />}>
-            <Route index element={<Home></Home>}/>
-          </Route>
-          <Route path="moment" element={<Moment />} />
-          <Route path="chat" element={<Chat />} />
-          <Route path="search" element={<Search />} />
-        </Routes>
+        <div>
+          <Routes>
+            <Route path="/" element={<Outlet />}>
+              <Route index element={<Home></Home>}/>
+            </Route>
+            <Route path="moment" element={<Moment />} />
+            <Route path="chat" element={<Chat />} />
+            <Route path="search" element={<Search />} />
+          </Routes>
+        </div>
+        
       </div>
       <div className={classes.footer}>
         <Nav actived={actived} onClick={handleNavClick}></Nav>

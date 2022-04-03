@@ -1,0 +1,26 @@
+.like {
+  h2 {
+    font-weight: bold;
+  }
+}
+
+
+// like swiper
+.swiper {
+  width: 90%;
+  height: 400px;
+  .swiperSlide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    @for $i from 1 to 10 {
+      &:nth-child(#{$i}n) {
+        background-color: rgb(100 + 10 * $i, 100, 170);
+      }
+    }
+  }
+}

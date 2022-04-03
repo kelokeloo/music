@@ -13,6 +13,7 @@
   @include inheritWH;
   box-sizing: border-box;
   padding: 1rem;
+  overflow: hidden;
 }
 .homeHeader {
   display: flex;
@@ -28,3 +29,9 @@
     border-bottom: 1px solid $lineColor;
   }
 }
+
+.recent, .range {
+  margin-top: 1rem;
+}
+
+

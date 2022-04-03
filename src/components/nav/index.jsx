@@ -38,7 +38,7 @@ export function Nav(props){
       {
         icons.map((item, index)=>{
           return (
-            <div className={classes.navItemBox} onClick={()=>{handleNavClick(index)}}>
+            <div className={classes.navItemBox} onClick={()=>{handleNavClick(index)}} key={index}>
               <section className={actived === index ? classes.activedStyle : ''}>
                 {item}
               </section>
