@@ -1,0 +1,23 @@
+// flex水平垂直居中
+@mixin cc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// 继承宽高
+@mixin inheritWH {
+  width: 100%;
+  height: 100%;
+}
+
+// antIconSize 
+$IconSize: 1.6rem;
+
+
+
+// themeColor
+$themeColor : rgba(211, 58, 44); 
+
+// lineColor 
+$lineColor: #aaa; 

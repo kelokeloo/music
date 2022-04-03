@@ -1,0 +1,30 @@
+@import '../../../css/global.scss';
+
+// antIconStyle
+
+.antIconStyle {
+  font-size: $IconSize;
+  svg{
+    color: $themeColor;
+  }
+}
+
+.homeBox {
+  @include inheritWH;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+.homeHeader {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  height: 2rem;
+}
+
+.contentHeader {
+  >h1 {
+    font-weight: 700;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid $lineColor;
+  }
+}

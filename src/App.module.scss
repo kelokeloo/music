@@ -1,0 +1,15 @@
+@import './css/global.scss';
+.box {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+}
+
+.footer {
+  height: 3.5rem;
+  border-top: 1px solid $lineColor;
+}

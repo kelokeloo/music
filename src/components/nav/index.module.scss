@@ -1,0 +1,30 @@
+@import '../../css/global.scss';
+
+.box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  section {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    transition: background-color .3s;
+    @include cc;
+  }
+}
+.navItemBox {
+  height: 100%;
+  flex: 1;
+  @include cc;
+}
+
+.activedStyle {
+  background-color: $themeColor; 
+  opacity: 1;
+  svg{
+    color: white;
+  }
+}
+
