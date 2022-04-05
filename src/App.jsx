@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import logo from './logo.svg'
 import './App.css'
 
@@ -13,9 +13,14 @@ import { AddMoment } from './views/Moment/addMoment';
 
 // footerNav
 import { Nav } from './components/nav'
+// playerMini
+import { PlayerMini } from './components/playerMini';
+// player
+import { Player } from './components/player'
 
 // style
 import classes from './App.module.scss'
+
 
 
 function App() { 
@@ -41,6 +46,26 @@ function App() {
     }
   }
 
+  // player
+  const [isPlaying, setIsPlaying] = useState(true)
+  const playerRef = useRef(null)
+  //  点击播放按钮
+  const handlePlayingClick = ()=>{
+    const state = !isPlaying
+    setIsPlaying(state)
+  }
+
+  //  点击playerMini播放按钮以外的地方
+  const handlePlayerClick = ()=>{
+    console.log('click');
+    playerRef.current.style.top = '0'
+  }
+  // player 返回
+  const handlePlayerClose = ()=>{
+    playerRef.current.style.top = '100%'
+  }
+
+
 
   return (
     <div className={classes.box}>
@@ -60,10 +85,15 @@ function App() {
             <Route />
           </Routes>
         </div>
-        
+      </div>
+      <div>
+        <PlayerMini isPlaying={isPlaying} onPlayingClick={handlePlayingClick} onPlayerClick={handlePlayerClick}></PlayerMini>
       </div>
       <div className={classes.footer}>
         <Nav actived={actived} onClick={handleNavClick}></Nav>
+      </div>
+      <div className={classes.player} ref={playerRef}>
+        <Player onPlayerClose={handlePlayerClose}></Player>
       </div>
     </div>
     
