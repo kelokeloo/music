@@ -1,6 +1,6 @@
 import { 
   CustomerServiceOutlined,
-  SearchOutlined, 
+  UserOutlined, 
   CommentOutlined,
   InstagramOutlined
 } from '@ant-design/icons'
@@ -26,7 +26,7 @@ export function Nav(props){
     <CustomerServiceOutlined {...layout} />,
     <CommentOutlined {...layout} />,
     <InstagramOutlined {...layout} />,
-    <SearchOutlined {...layout}/>
+    <UserOutlined {...layout}/>
   ]
 
   function handleNavClick(index){

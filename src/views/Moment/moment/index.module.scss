@@ -1,0 +1,15 @@
+@import '../../../css/global.scss';
+.box {
+  padding: 1rem;
+  header:nth-child(1) {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+}
+
+.iconStyle {
+  font-size: $IconSize;
+  svg{
+    color: $themeColor;
+  }
+}

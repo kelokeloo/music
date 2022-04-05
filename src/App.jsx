@@ -9,6 +9,7 @@ import { Home } from './views/Home/home'
 import { Moment } from './views/Moment/moment'
 import { Chat } from './views/Chat/chat'
 import { Search } from './views/Search/search';
+import { AddMoment } from './views/Moment/addMoment';
 
 // footerNav
 import { Nav } from './components/nav'
@@ -48,10 +49,15 @@ function App() {
           <Routes>
             <Route path="/" element={<Outlet />}>
               <Route index element={<Home></Home>}/>
+              <Route path="moment" element={<Outlet />}>
+                <Route index element={<Moment />}></Route>
+                <Route path="add" element={<AddMoment />}></Route>
+              </Route>
+
+              <Route path="chat" element={<Chat />} />
+              <Route path="search" element={<Search />} />
             </Route>
-            <Route path="moment" element={<Moment />} />
-            <Route path="chat" element={<Chat />} />
-            <Route path="search" element={<Search />} />
+            <Route />
           </Routes>
         </div>
         
