@@ -8,7 +8,7 @@ import { Routes, Route, Outlet, useNavigate } from "react-router-dom";
 import { Home } from './views/Home/home'
 import { Moment } from './views/Moment/moment'
 import { Chat } from './views/Chat/chat'
-import { Search } from './views/Search/search';
+import { Me } from './views/Me/me';
 import { AddMoment } from './views/Moment/addMoment';
 
 // footerNav
@@ -55,7 +55,7 @@ function App() {
               </Route>
 
               <Route path="chat" element={<Chat />} />
-              <Route path="search" element={<Search />} />
+              <Route path="search" element={<Me />} />
             </Route>
             <Route />
           </Routes>
