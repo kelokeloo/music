@@ -14,18 +14,16 @@ import 'rc-slider/assets/index.css';
 import { Play } from '../../components/common/play'
 
 export function Player(props){
-  const { onPlayerClose} = props
+  const { onPlayerClose, playState, onPlayStateChange} = props
   let { imgUrl, songName, singer, duration } = props
   imgUrl = imgUrl??'/img/4.jpg'
   songName = songName??'指纹'
   singer = singer?? '杜宣达'
   duration = duration?? 200
-  // isPlaying = isPlaying?? false
 
   const [likeActive, setLikeActive] = useState(true)
 
-  // 是否播放
-  const [isPlaying , setIsPlaying] = useState(false)
+
 
   const handleLikeClick = ()=>{
     const state = !likeActive
@@ -61,11 +59,6 @@ export function Player(props){
     }
   }
 
-  // 播放暂停
-  const handlePlayingClick = ()=>{
-    const state = !isPlaying;
-    setIsPlaying(state)
-  }
 
   return (
     <div className={classes.box}>
@@ -114,8 +107,8 @@ export function Player(props){
           </div>
           <div className={classes.ctrl}>
             <BackwardOutlined className={classes.ctrlIconStyle}/>
-            <span className={classes.playing} onClick={handlePlayingClick}>
-              {isPlaying ? <Play></Play> : <PauseOutlined className={classes.pauseStyle}/>}
+            <span className={classes.playing} onClick={onPlayStateChange}>
+              {playState ? <Play></Play> : <PauseOutlined className={classes.pauseStyle}/>}
             </span>
             <ForwardOutlined className={classes.ctrlIconStyle} />
           </div>

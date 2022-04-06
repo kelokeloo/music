@@ -23,6 +23,9 @@ import classes from './App.module.scss'
 
 
 
+
+
+
 function App() { 
   // nav
   const [ actived, setActived] = useState(0)
@@ -48,21 +51,27 @@ function App() {
 
   // player
   const [isPlaying, setIsPlaying] = useState(true)
+  const playerPageRef = useRef(null)
   const playerRef = useRef(null)
   //  点击播放按钮
   const handlePlayingClick = ()=>{
     const state = !isPlaying
+    if(state){
+      playerRef.current.pause()
+    }
+    else {
+      playerRef.current.play()
+    }
     setIsPlaying(state)
   }
 
   //  点击playerMini播放按钮以外的地方
   const handlePlayerClick = ()=>{
-    console.log('click');
-    playerRef.current.style.top = '0'
+    playerPageRef.current.style.top = '0'
   }
   // player 返回
   const handlePlayerClose = ()=>{
-    playerRef.current.style.top = '100%'
+    playerPageRef.current.style.top = '100%'
   }
 
 
@@ -92,8 +101,20 @@ function App() {
       <div className={classes.footer}>
         <Nav actived={actived} onClick={handleNavClick}></Nav>
       </div>
-      <div className={classes.player} ref={playerRef}>
-        <Player onPlayerClose={handlePlayerClose}></Player>
+      <div className={classes.audio}>
+        <audio
+          // controls
+          // autoPlay
+          ref={playerRef}
+          src="http://localhost:3001/music/%E5%BC%B5%E5%AD%90%E9%93%AD%20-%20%E8%B0%81%E6%84%BF%E6%94%BE%E6%89%8B.mp3"
+        >
+          <code>audio</code> element.
+        </audio>
+      </div>
+      <div className={classes.player} ref={playerPageRef}>
+        <Player onPlayerClose={handlePlayerClose} 
+          playState={isPlaying} onPlayStateChange={handlePlayingClick}
+        ></Player>
       </div>
     </div>
     
