@@ -12,8 +12,8 @@ import { Recent } from '../../../components/home/recent'
 import { Range } from '../../../components/home/range'
 
 
-export function Home(){
-
+export function Home(props){
+  const { loadMusic } = props
   const layout = {
     style: {
       fontSize: '1.6rem',
@@ -29,7 +29,7 @@ export function Home(){
         <h1>现在就听</h1>
       </header>
       <div className='like'>
-        <Like></Like>
+        <Like loadMusic={loadMusic}></Like>
       </div>
       <div className={classes.recent}>
         <Recent></Recent>

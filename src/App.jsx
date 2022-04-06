@@ -25,7 +25,6 @@ import classes from './App.module.scss'
 
 
 
-
 function App() { 
   // nav
   const [ actived, setActived] = useState(0)
@@ -53,6 +52,14 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(true)
   const playerPageRef = useRef(null)
   const playerRef = useRef(null)
+  const [playingMusic, setPlayingMusic] = useState('')
+  const [musicInfo, setMusicInfo] = useState({
+    info:{
+      name: '',
+      singer: '',
+      imgUrl: ''
+    }
+  })
   //  点击播放按钮
   const handlePlayingClick = ()=>{
     const state = !isPlaying
@@ -74,6 +81,19 @@ function App() {
     playerPageRef.current.style.top = '100%'
   }
 
+  // 加载音乐
+  const loadMusic = (music)=>{
+    const { musicUrl, name, singer, imgUrl } = music
+    setPlayingMusic(musicUrl)
+    setMusicInfo({
+      info: {
+        name,
+        singer,
+        imgUrl
+      }
+    })
+    playerRef.current.play()
+  }
 
 
   return (
@@ -82,7 +102,7 @@ function App() {
         <div>
           <Routes>
             <Route path="/" element={<Outlet />}>
-              <Route index element={<Home></Home>}/>
+              <Route index element={<Home loadMusic={loadMusic}></Home>}/>
               <Route path="moment" element={<Outlet />}>
                 <Route index element={<Moment />}></Route>
                 <Route path="add" element={<AddMoment />}></Route>
@@ -95,8 +115,12 @@ function App() {
           </Routes>
         </div>
       </div>
-      <div>
-        <PlayerMini isPlaying={isPlaying} onPlayingClick={handlePlayingClick} onPlayerClick={handlePlayerClick}></PlayerMini>
+      <div className={'playerMini'}>
+        <PlayerMini 
+          isPlaying={isPlaying} 
+          {...musicInfo.info}
+          onPlayingClick={handlePlayingClick} onPlayerClick={handlePlayerClick}
+        ></PlayerMini>
       </div>
       <div className={classes.footer}>
         <Nav actived={actived} onClick={handleNavClick}></Nav>
@@ -106,7 +130,7 @@ function App() {
           // controls
           // autoPlay
           ref={playerRef}
-          src="http://localhost:3001/music/%E5%BC%B5%E5%AD%90%E9%93%AD%20-%20%E8%B0%81%E6%84%BF%E6%94%BE%E6%89%8B.mp3"
+          src={playingMusic}
         >
           <code>audio</code> element.
         </audio>

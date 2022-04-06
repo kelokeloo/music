@@ -8,13 +8,16 @@ import {
 } from '@ant-design/icons'
 
 export function PlayerMini(props){
-  const {isPlaying,  onPlayingClick, onPlayerClick } = props
+  const {isPlaying,  onPlayingClick, onPlayerClick,
+    name, singer, imgUrl
+   } = props
+   console.log('imgUrl', imgUrl);
   return (
     <div className={classes.player} onClick={onPlayerClick}>
-      <Avatar className={classes.logo} size="large" icon={<CustomerServiceOutlined />}></Avatar>
+      <Avatar className={classes.logo} size="large" src={imgUrl}></Avatar>
       <div className={classes.info}>
-        <span>指纹</span>
-        <span>-杜宣达</span>
+        <span>{name}</span>
+        <span>-{singer}</span>
       </div>
       <div onClick={(ev)=>{ev.stopPropagation(); onPlayingClick()}}>
         {

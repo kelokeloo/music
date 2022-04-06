@@ -1,5 +1,5 @@
 import classes from './index.module.scss'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,10 +15,17 @@ import { EffectCards } from "swiper";
 import { getHandpick } from '../../../Api/home'
 
 // conf
-
 import { baseUrl } from '../../../global.conf';
 
+// 
+import { getMusicById } from '../../../Api/common/load'
+
+
+
+
 export function Like(props){
+  const { loadMusic } = props
+  console.log('loadMusic', loadMusic);
   const [data, setData] = useState({
     list: [{title: 'go'}]
   })
@@ -46,10 +53,15 @@ export function Like(props){
         </div>
       </SwiperSlide>
     }
-    function handleSwiperSliderClick(type){
-      switch (type) {
+    async function handleSwiperSliderClick(type){
+      switch (type.name) {
         case 'music': // 加载音乐
-          
+          const { data } = await getMusicById(type.id)
+          let musicUrl = baseUrl + data.musicUrl
+          let imgUrl = baseUrl + data.imgUrl
+          data.musicUrl = musicUrl
+          data.imgUrl = imgUrl
+          loadMusic(data)
           break;
         case 'album': // 跳转到指定歌单
 
@@ -63,7 +75,9 @@ export function Like(props){
 
     return list.map((item, index)=>{
       return (
-        <SwiperSlide className={classes.swiperSlide} key={index}>
+        <SwiperSlide className={classes.swiperSlide} key={index}
+          onClick={()=>{handleSwiperSliderClick(item.type)}}
+        >
           <div className={classes.card}>
             <div className={classes.cardImg}>
               <img src={item.imgUrl}/>
