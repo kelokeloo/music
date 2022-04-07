@@ -1,0 +1,45 @@
+@import '../../../css/global.scss';
+.box {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  >header {
+    position: fixed;
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    .iconStyle {
+      font-size: $IconSize;
+      svg {
+        color: $themeColor;
+      }
+    }
+  }
+  .main {
+    margin-top: 3rem;
+    flex: 1;
+    padding: .8rem;
+  }
+}
+.img {
+  padding: 3rem;
+  padding-top: 0;
+  padding-bottom: 2rem;
+  aspect-ratio: 1/1;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+
+.albumInfo {
+  h2 {
+    font-weight: bold;
+  }
+}
+

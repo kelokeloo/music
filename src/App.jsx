@@ -10,6 +10,7 @@ import { Moment } from './views/Moment/moment'
 import { Chat } from './views/Chat/chat'
 import { Me } from './views/Me/me';
 import { AddMoment } from './views/Moment/addMoment';
+import { Album } from './views/Album/album'
 
 // footerNav
 import { Nav } from './components/nav'
@@ -92,7 +93,10 @@ function App() {
         imgUrl
       }
     })
-    playerRef.current.play()
+    setIsPlaying(false)
+    setTimeout(()=>{
+      playerRef.current.play()
+    }, 0)
   }
 
 
@@ -107,7 +111,7 @@ function App() {
                 <Route index element={<Moment />}></Route>
                 <Route path="add" element={<AddMoment />}></Route>
               </Route>
-
+              <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
               <Route path="chat" element={<Chat />} />
               <Route path="search" element={<Me />} />
             </Route>

@@ -20,11 +20,15 @@ import { baseUrl } from '../../../global.conf';
 // 
 import { getMusicById } from '../../../Api/common/load'
 
+// react router 
+import { useNavigate } from 'react-router';
 
 
 
 export function Like(props){
   const { loadMusic } = props
+  const navigateTo = useNavigate()
+
   console.log('loadMusic', loadMusic);
   const [data, setData] = useState({
     list: [{title: 'go'}]
@@ -64,7 +68,7 @@ export function Like(props){
           loadMusic(data)
           break;
         case 'album': // 跳转到指定歌单
-
+          navigateTo(`/album/${type.id}`)
           break;
       
         default:
