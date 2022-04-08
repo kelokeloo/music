@@ -11,7 +11,6 @@ export function PlayerMini(props){
   const {isPlaying,  onPlayingClick, onPlayerClick,
     name, singer, imgUrl
    } = props
-   console.log('imgUrl', imgUrl);
   return (
     <div className={classes.player} onClick={onPlayerClick}>
       <Avatar className={classes.logo} size="large" src={imgUrl}></Avatar>

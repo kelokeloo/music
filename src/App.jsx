@@ -115,6 +115,9 @@ function App() {
               <Route path="chat" element={<Chat />} />
               <Route path="search" element={<Me />} />
             </Route>
+            <Route path='/login'>
+              
+            </Route>
             <Route />
           </Routes>
         </div>

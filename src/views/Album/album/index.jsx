@@ -53,13 +53,11 @@ export function Album(props){
     setMusicList({
       list: datas
     })
-    console.log(datas);
 
   }, [])
 
   // 点击音乐的时候
   function handleMusicClick(music){
-    console.log(music);
     loadMusic(music)
   }
 

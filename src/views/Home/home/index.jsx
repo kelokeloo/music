@@ -35,7 +35,7 @@ export function Home(props){
         <Recent></Recent>
       </div>
       <div className={classes.range}>
-        <Range></Range>
+        <Range loadMusic={loadMusic}></Range>
       </div>
     </div>
   )

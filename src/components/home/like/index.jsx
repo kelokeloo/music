@@ -29,7 +29,6 @@ export function Like(props){
   const { loadMusic } = props
   const navigateTo = useNavigate()
 
-  console.log('loadMusic', loadMusic);
   const [data, setData] = useState({
     list: [{title: 'go'}]
   })
@@ -37,7 +36,6 @@ export function Like(props){
   useEffect(()=>{
     getHandpick()
     .then((res)=>{
-      console.log(res.data);
       res.data.forEach(item=>{
         item.imgUrl = baseUrl + item.imgUrl
       })
@@ -48,7 +46,6 @@ export function Like(props){
   
   // card
   function CreateSwiperSlides(list){
-    console.log('list', list);
     if(!list){
       return 
       <SwiperSlide className={classes.swiperSlide}>

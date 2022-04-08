@@ -15,5 +15,19 @@ export async function getHandpick(){
   }
 }
 
+/**
+ * 获取排行榜数据
+ */
+export async function getRange(){
+  try{
+    const data = await http.get('/api/range')
+    return data
+ }
+ catch(e){
+   console.error(e);
+   return e
+ }
+}
+
 
 
