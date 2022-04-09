@@ -10,6 +10,8 @@ import { baseUrl } from "../../../global.conf"
 import { List,Avatar  } from 'antd';
 
 import { TokenTest } from '../../../components/common/tokenTest'
+// mark
+import { musicMark } from '../../../Api/common/load'
 
 import {
   ArrowLeftOutlined
@@ -60,6 +62,8 @@ export function Album(props){
 
   // 点击音乐的时候
   function handleMusicClick(music){
+    // console.log(music);
+    musicMark(music.id)
     loadMusic(music)
   }
 

@@ -9,6 +9,7 @@ import { Home } from './views/Home/home'
 import { Moment } from './views/Moment/moment'
 import { Chat } from './views/Chat/chat'
 import { Me } from './views/Me/me';
+import { Search } from './views/Search/search';
 import { AddMoment } from './views/Moment/addMoment';
 import { Album } from './views/Album/album'
 import { Login } from './views/Login/login'
@@ -118,6 +119,7 @@ function App() {
               <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
               <Route path="chat" element={<Chat />} />
               <Route path="me" element={<Me />} />
+              <Route path="search" element={<Search loadMusic={loadMusic} />} />
             </Route>
             <Route />
             

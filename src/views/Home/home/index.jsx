@@ -1,5 +1,5 @@
 import {
-  SmileOutlined
+  SearchOutlined
 } from '@ant-design/icons';
 
 import classes from './index.module.scss'
@@ -12,7 +12,8 @@ import { Recent } from '../../../components/home/recent'
 import { Range } from '../../../components/home/range'
 // token
 import { TokenTest } from '../../../components/common/tokenTest'
-
+// navigate
+import { useNavigate } from 'react-router';
 
 
 
@@ -27,10 +28,16 @@ export function Home(props){
     }
   }
 
+  const navigateTo = useNavigate()
+  // 跳转到搜索页面
+  function handleSearchClick(){
+    navigateTo('/search')
+  }
+
   return (
     <div className={classes.homeBox}>
       <header className={classes.homeHeader}>
-        <SmileOutlined className={classes.antIconStyle} />
+        <SearchOutlined className={classes.antIconStyle} onClick={handleSearchClick}/>
       </header>
       <header className={classes.contentHeader}>
         <h1>现在就听</h1>

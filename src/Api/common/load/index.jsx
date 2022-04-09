@@ -58,3 +58,45 @@ export async function getRecentMusic(){
 }
 
 
+/**
+ * 音乐标记，标记最近播放的音乐
+ */
+export function musicMark(musicId){
+  return http.get(`/api/musicMark/${musicId}`)
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
+/**
+ * 歌单标记，标记最近播放的歌单
+ */
+ export function albumMark(albumId){
+  return http.get(`/api/albumMark/${albumId}`)
+  .then(data=>{
+    console.log(data);
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
+
+/**
+ * search
+ */
+
+
+ export function searchByKey(type, keyWord){
+  return http.get(`/api/search/${type}/${keyWord}`)
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}

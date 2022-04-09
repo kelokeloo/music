@@ -17,11 +17,12 @@ import { getHandpick } from '../../../Api/home'
 // conf
 import { baseUrl } from '../../../global.conf';
 
-// 
-import { getMusicById } from '../../../Api/common/load'
+// mark & ...
+import { musicMark, getMusicById, albumMark } from '../../../Api/common/load'
 
 // react router 
 import { useNavigate } from 'react-router';
+
 
 
 
@@ -63,6 +64,8 @@ export function Like(props){
       switch (type.name) {
         case 'music': // 加载音乐
           const { data } = await getMusicById(type.id)
+          // 标记音乐
+          musicMark(type.id)
           let musicUrl = baseUrl + data.musicUrl
           let imgUrl = baseUrl + data.imgUrl
           data.musicUrl = musicUrl
@@ -70,6 +73,9 @@ export function Like(props){
           loadMusic(data)
           break;
         case 'album': // 跳转到指定歌单
+          // 标记歌单
+          albumMark(type.id)
+          console.log('----', type.id);
           navigateTo(`/album/${type.id}`)
           break;
       

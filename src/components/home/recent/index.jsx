@@ -1,6 +1,6 @@
 import classes from './index.module.scss'
 import { useRef, useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router';
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -29,7 +29,6 @@ export function Recent(props) {
 
       if(cancel) return
       // 拼接成数组请求数据
-      console.log(data);
       let recentMusics = data.data?.recentMusicAlbum
       let userAlbumList = data.data?.albumList ?? []
       // 如果最近喜欢的音乐列表在歌单中则去除
@@ -58,7 +57,6 @@ export function Recent(props) {
         })
 
         if(cancel) return // ...
-        console.log('dataArr', dataArr);
         setDataArr({
           list: dataArr
         })
@@ -70,28 +68,10 @@ export function Recent(props) {
     }
   }, [])
 
-  function CreateSwiperSlide(props){
-    const { list } = props
-
-    const res = list.map(item=>{
-      return (
-        <SwiperSlide key={item._id} className={classes.swiperSlide}>
-          <div className={classes.swiperItem}>
-              xxx
-          </div>
-        </SwiperSlide>
-      )
-    })
-    // list.map((item)=>{
-    //   return (
-    //     <SwiperSlide key={item._id} className={classes.swiperSlide}>
-    //       <div className={classes.swiperItem}>
-    //         {item.title}
-    //       </div>
-    //     </SwiperSlide>
-    //   )
-    // })
-    return res
+  // 处理点击
+  const navigateTo = useNavigate()
+  function handleAlbumClick(albumId){
+    navigateTo(`/album/${albumId}`)
   }
 
   return (
@@ -107,7 +87,18 @@ export function Recent(props) {
         modules={[FreeMode]}
         className={classes.swiper}
       >
-        {<CreateSwiperSlide list={dataArr.list}></CreateSwiperSlide>}
+        {
+          dataArr.list.map(item=>{
+            return (
+              <SwiperSlide className={classes.swiperSlide} key={item._id}>
+                <div className={classes.swiperItem} onClick={()=>handleAlbumClick(item.id)}>
+                  <img src={item.imgUrl}/>
+                  <p>{item.title}</p>
+                </div>
+              </SwiperSlide>
+            )
+          })
+        }
       </Swiper> 
     </div>
   )
