@@ -3,6 +3,8 @@ import classes from './index.module.scss'
 import { Avatar, Card  } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
+import { TokenTest } from '../../../components/common/tokenTest'
+
 export function Me(){
   const name = 'kelokeloo'
   const attention = 36
@@ -44,6 +46,7 @@ export function Me(){
       <div className={classes.moment}>
         动态
       </div>
+      <TokenTest></TokenTest>
     </div>
   )
 }

@@ -6,6 +6,10 @@ const http = axios.create({
 
 // 请求拦截
 http.interceptors.request.use(config=>{
+  if (window.sessionStorage.token) { //判断token是否存在
+    config.headers.Authorization = window.sessionStorage.getItem('token');  //将token设置成请求头
+    config.headers.userid = window.sessionStorage.getItem('userid');
+  }
   return config
 }, (err)=>{
   return Promise.reject(err)

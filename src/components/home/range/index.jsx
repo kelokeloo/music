@@ -29,14 +29,21 @@ export function Range(props){
     ]
   })
 
-  useEffect(async()=>{
-    try{
-      const data = await getRange()
+  useEffect(()=>{
+    let cancel = false
+    let timer = null;
+
+    getRange()
+    .then((data)=>{
+      if(cancel) return
       const musicList = data.musicList
       const promises = musicList.map(item=>{
         return getMusicById(item)
       })
-      let resList = await Promise.all(promises)
+      return Promise.all(promises)
+    })
+    .then((resList)=>{
+      if(cancel) return
       // 解包
       resList = resList.map(item=>{
         item = item.data
@@ -47,10 +54,13 @@ export function Range(props){
       setData({
         list: resList
       })
-      console.log(resList);
-    }
-    catch(e){
-      console.log(e);
+    }) 
+    .catch(e=>{
+      console.error(e)
+    })
+    
+    return ()=>{
+      cancel = true
     }
   }, [])
 

@@ -6,6 +6,8 @@ import { MomentCard } from '../../../components/moment/momentItem'
 
 import { useNavigate } from 'react-router';
 
+import { TokenTest } from '../../../components/common/tokenTest'
+
 export function Moment(){
   const navigateTo = useNavigate()
   function goToAddMoment(){
@@ -18,6 +20,7 @@ export function Moment(){
       <div>
         <MomentCard></MomentCard>
       </div>
+      <TokenTest></TokenTest>
     </div>
   )
 }

@@ -10,6 +10,13 @@ import { Like } from '../../../components/home/like'
 import { Recent } from '../../../components/home/recent'
 // range
 import { Range } from '../../../components/home/range'
+// token
+import { TokenTest } from '../../../components/common/tokenTest'
+
+
+
+
+
 
 
 export function Home(props){
@@ -37,6 +44,7 @@ export function Home(props){
       <div className={classes.range}>
         <Range loadMusic={loadMusic}></Range>
       </div>
+      <TokenTest></TokenTest>
     </div>
   )
 }

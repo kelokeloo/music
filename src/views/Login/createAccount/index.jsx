@@ -1,49 +1,19 @@
 import classes from './index.module.scss'
 
-import { Form, Input, Button, Checkbox, message } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 
 import { Link } from 'react-router-dom';
 
-import { login } from '../../../Api/common/load';
 
-import { useNavigate } from 'react-router';
-
-
-
-
-const onFinish = async (values, callback) => {
-  // 发起登录请求
-  const data = await login({...values})
-  console.log(data);
-  // 登录成功
-  if(data.code === 200){
-    message.success('登录成功')
-    // 保存token
-    const token = data.data.token
-    window.sessionStorage.setItem('token', token)
-    // 保存用户信息
-
-    window.sessionStorage.setItem('userid', data.data.userID)
-
-
-    // 跳转到首页
-    callback('/')
-    return true
-  }
-  else {
-    message.error('登录失败,请检查账号密码')
-    return false
-  }
-
-
+const onFinish = (values) => {
+  console.log('Success:', values);
 };
 
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 
-export function Login(props){
-  const navigateTo = useNavigate()
+export function CreateAccount(props){
   return (
     <div className={classes.box}>
       <div className={classes.form}>
@@ -52,13 +22,13 @@ export function Login(props){
         initialValues={{
           remember: true,
         }}
-        onFinish={(values)=>{onFinish(values, navigateTo)}}
+        onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <h2>登录</h2>
+        <h2>注册</h2>
         <Form.Item
-          label="Username"
+          label="用户名"
           name="username"
           rules={[
             {
@@ -71,7 +41,20 @@ export function Login(props){
         </Form.Item>
 
         <Form.Item
-          label="Password"
+          label="密码"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your password!',
+            },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item
+          label="确认密码"
           name="password"
           rules={[
             {
@@ -85,14 +68,13 @@ export function Login(props){
 
         <Form.Item>
           <Button className={classes.btn} type="primary" htmlType="submit">
-            登录
+            注册
           </Button>
         </Form.Item>
       </Form>
       </div>
       <div className={classes.options}>
-        <p><Link className={classes.linkStyle} to="/login/forget">忘记密码</Link></p>
-        <p><Link className={classes.linkStyle} to="/login/create">创建账号</Link></p>
+        <p><Link className={classes.linkStyle} to="/login">登录</Link></p>
       </div>
     </div>
   )

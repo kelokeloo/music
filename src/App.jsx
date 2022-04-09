@@ -11,6 +11,9 @@ import { Chat } from './views/Chat/chat'
 import { Me } from './views/Me/me';
 import { AddMoment } from './views/Moment/addMoment';
 import { Album } from './views/Album/album'
+import { Login } from './views/Login/login'
+import { Forget } from './views/Login/forget'
+import { CreateAccount } from './views/Login/createAccount'
 
 // footerNav
 import { Nav } from './components/nav'
@@ -99,6 +102,7 @@ function App() {
     }, 0)
   }
 
+  const [showOptions, setShowOptions] = useState(true)
 
   return (
     <div className={classes.box}>
@@ -113,12 +117,15 @@ function App() {
               </Route>
               <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
               <Route path="chat" element={<Chat />} />
-              <Route path="search" element={<Me />} />
-            </Route>
-            <Route path='/login'>
-              
+              <Route path="me" element={<Me />} />
             </Route>
             <Route />
+            
+            <Route path='/login' element={<Outlet></Outlet>}>
+              <Route index element={<Login></Login>}></Route>
+              <Route path='forget' element={<Forget></Forget>}></Route>
+              <Route path='create' element={<CreateAccount></CreateAccount>}></Route>
+            </Route>
           </Routes>
         </div>
       </div>

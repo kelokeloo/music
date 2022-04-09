@@ -9,6 +9,8 @@ import { baseUrl } from "../../../global.conf"
 
 import { List,Avatar  } from 'antd';
 
+import { TokenTest } from '../../../components/common/tokenTest'
+
 import {
   ArrowLeftOutlined
 } from '@ant-design/icons'
@@ -104,6 +106,7 @@ export function Album(props){
           <CreateMusicList list={musicList.list}></CreateMusicList>
         </div>
       </main>
+      <TokenTest></TokenTest>
     </div>
   )
 }

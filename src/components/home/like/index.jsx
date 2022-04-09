@@ -34,13 +34,18 @@ export function Like(props){
   })
 
   useEffect(()=>{
+    let cancel = false
     getHandpick()
     .then((res)=>{
+      if(cancel) return
       res.data.forEach(item=>{
         item.imgUrl = baseUrl + item.imgUrl
       })
       setData({list: res.data})
     })
+    return ()=>{
+      cancel = true
+    }
   }, [])
 
   

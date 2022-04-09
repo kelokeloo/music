@@ -8,6 +8,8 @@ import { useRef, useEffect } from 'react'
 
 import { useNavigate } from 'react-router';
 
+import { TokenTest } from '../../../components/common/tokenTest'
+
 export function AddMoment(props){
   const inputRef = useRef(null);
   const navigateTo = useNavigate()
@@ -62,6 +64,7 @@ export function AddMoment(props){
           />
         </Card>
       </main>
+      <TokenTest></TokenTest>
     </div>
   )
 }

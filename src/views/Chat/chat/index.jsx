@@ -5,12 +5,13 @@ import { MessageBox } from "react-chat-elements";
 
 import { ChatItem, SideBar, Popup } from "react-chat-elements";
 
+import { TokenTest } from '../../../components/common/tokenTest'
 
 
 export function Chat(){
   return (
     <div>
-      
+      <TokenTest></TokenTest>
     </div>
   )
 }
