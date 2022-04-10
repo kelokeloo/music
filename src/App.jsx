@@ -47,7 +47,7 @@ function App() {
         navigateTo('/moment')
         break;
       case 3:
-        navigateTo('/search')
+        navigateTo('/me')
       default:
         break;
     }

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { login } from '../../../Api/common/load';
 
 import { useNavigate } from 'react-router';
+import { baseUrl } from '../../../global.conf';
 
 
 
@@ -18,14 +19,14 @@ const onFinish = async (values, callback) => {
   // 登录成功
   if(data.code === 200){
     message.success('登录成功')
+    console.log('user login info', data.data);
     // 保存token
     const token = data.data.token
     window.sessionStorage.setItem('token', token)
     // 保存用户信息
-
     window.sessionStorage.setItem('userid', data.data.userID)
-
-
+    window.sessionStorage.setItem('headIcon', baseUrl + data.data.headIcon)
+    window.sessionStorage.setItem('username', data.data.username)
     // 跳转到首页
     callback('/')
     return true
