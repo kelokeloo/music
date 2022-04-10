@@ -1,8 +1,7 @@
 import classes from './index.module.scss'
 
-import { CloseCircleOutlined, PlusSquareOutlined } from '@ant-design/icons'
+import { CloseCircleOutlined, PlusSquareOutlined, PlusOutlined  } from '@ant-design/icons'
 import { Card, Avatar, Input, Form, Upload, Modal,Button   } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 const { TextArea } = Input;
 const { Meta } = Card;
 import { useRef, useEffect, useState } from 'react'
@@ -11,6 +10,8 @@ import { useNavigate } from 'react-router';
 
 import { TokenTest } from '../../../components/common/tokenTest'
 import { baseUrl } from '../../../global.conf'
+
+import { publishMoment } from '../../../Api/common/load'
 
 import http from '../../../Api/common/http'
 
@@ -48,9 +49,19 @@ export function AddMoment(props){
 
   function publish(){
     const content = inputRef.current.resizableTextArea.props.value
-    
-    // 存放value值
-    console.log(content);
+    let list = uploadImageList.list
+    // 对上传数据进行处理
+    list = list.map(item=>{
+      return item.substring(baseUrl.length)
+    })
+    const data = {
+      content, 
+      imgList: list
+    }
+    publishMoment(data)
+    .then(data=>{
+      console.log(data);
+    })
     
     
   }
@@ -98,13 +109,18 @@ export function AddMoment(props){
         </header>        
         <div className={classes.form}>
           <TextArea autoSize ref={inputRef} placeholder='动态内容'/>
-          <input type="file" multiple name='photos' ref={fileInputRef} onChange={handleInputChange}/>
         </div>
-        <div>
+        <div className={classes.photos}>
           {
             uploadImageList.list.map((item,index)=>{
               return <img key={index} src={item}/>
             })
+          }
+          {
+            <a href="javascript:;">
+              <PlusOutlined className={classes.iconStyle}></PlusOutlined>
+              <input type="file" multiple name='photos' ref={fileInputRef} onChange={handleInputChange}/>
+            </a>
           }
         </div>
       </main>

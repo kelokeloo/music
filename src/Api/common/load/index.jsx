@@ -132,6 +132,19 @@ export function musicMark(musicId){
   })
 }
 
+/**
+ * publish 发布动态
+ */
+ export function publishMoment(moment){
+  return http.post(`/api/moment/publish`, moment)
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
 
 
 
