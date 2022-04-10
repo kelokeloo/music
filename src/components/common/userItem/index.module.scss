@@ -1,0 +1,36 @@
+@import '../../../css/global.scss';
+
+.box {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+}
+.content {
+  margin-left: 1rem;
+  font-weight: bold;
+  flex: 1;
+}
+
+.iconStyle {
+  margin-right: .5rem;
+  font-size: $IconSize;
+  svg {
+    color: $deactiveColor
+  }
+}
+
+.options {
+  span {
+    border-radius: 999px;
+    padding: .3rem .5rem;
+  }
+
+  .defocus {  
+    border: 1px solid $deactiveColor;
+  }
+  
+  .focus {
+    border: 1px solid $themeColor;
+    color: $themeColor;
+  }
+}

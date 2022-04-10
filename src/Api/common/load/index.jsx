@@ -100,3 +100,43 @@ export function musicMark(musicId){
     console.error(e)
   })
 }
+
+/**
+ * 关注用户与取消关注
+ * state 为false 表示不关注， true表示关注
+ */
+ export function setFocusUser(id, state){
+  return http.post(`/api/focus`, {
+    id,
+    state
+  })
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
+/**
+ * 获取用户关注列表
+ */
+
+ export function getUserFocusList(userId){
+  return http.get(`/api/focuslist`)
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
+
+
+
+
+
+
+
+

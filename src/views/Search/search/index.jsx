@@ -10,10 +10,13 @@ const { TabPane } = Tabs;
 import { useNavigate } from 'react-router';
 import { useRef, useEffect, useState } from 'react';
 
-import { searchByKey } from '../../../Api/common/load/index'
+import { searchByKey, getUserFocusList } from '../../../Api/common/load/index'
 
 // musicItem
 import { MusicItem } from '../../../components/common/musicItem'
+import { AlbumItem } from '../../../components/common/albumItem'
+import { UserItem } from '../../../components/common/userItem'
+
 // baseUrl 
 import { baseUrl } from '../../../global.conf';
 
@@ -25,11 +28,26 @@ export function Search(props){
     if(!value) return
     setKeyWord(value) // 记录搜索内容
     const data = await searchByKey(type, value) // 搜索api
-    const { data: list } = data
-    // setState
-    setShowData({
-      list: list
+    let { data: list } = data
+    // 如果搜索内容type是user，做一下初始化
+    getUserFocusList()
+    .then(({data: focusList})=>{
+      list = list.map(item=>{
+        if(focusList.includes(item._id)){
+          item.focusInitState = true
+        }
+        else {
+          item.focusInitState = false
+        }
+        return item
+      })
+      setShowData({
+        list: list
+      })
     })
+
+    // setState
+    
 
   }
   // router
@@ -80,6 +98,32 @@ export function Search(props){
               singer={item.singer}
               id={item.id}
               loadMusic={loadMusic}></MusicItem>
+          )
+        })
+        break;
+      case 'album':
+        if(!list.length) break;
+        result = list.map(item=>{
+          return (
+            <AlbumItem 
+              key={item._id}
+              imgUrl={baseUrl + item.imgUrl} 
+              title={item.title}
+              content={item.content}
+              id={item.id}></AlbumItem>
+          )
+        })
+        break;
+      case 'user':
+        if(!list.length) break;
+        result = list.map(item=>{
+          return (
+            <UserItem 
+              focusInitState = {item.focusInitState}
+              key={item._id}
+              headIcon={baseUrl + item.headIcon} 
+              username={item.username}
+              _id={item._id}></UserItem>
           )
         })
         break;
