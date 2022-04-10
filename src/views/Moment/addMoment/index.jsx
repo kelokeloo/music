@@ -1,7 +1,7 @@
 import classes from './index.module.scss'
 
 import { CloseCircleOutlined, PlusSquareOutlined } from '@ant-design/icons'
-import { Card, Avatar, Input } from 'antd';
+import { Card, Avatar, Input, Form } from 'antd';
 const { TextArea } = Input;
 const { Meta } = Card;
 import { useRef, useEffect } from 'react'
@@ -17,6 +17,10 @@ export function AddMoment(props){
   const imgList = ['/img/1.jpg', '/img/2.jpg']
   const content = 'asdjfisadjfo yes go good yar asdjfisadjfo yes go good yar asdjfisadjfo yes go good yar asdjfisadjfo yes go good yar '
 
+  // 用户信息
+  const headIcon = window.sessionStorage.getItem('headIcon')
+  const username = window.sessionStorage.getItem('username')
+
   useEffect(() => {
     inputRef.current.focus()
   }, []);
@@ -25,29 +29,22 @@ export function AddMoment(props){
     navigateTo(-1)
   }
 
+  
+
+  // 表单相关
+  const [form] = Form.useForm();
+  const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  // 点击发布
   function publish(){
     console.log('发布');
-  }
-
-  function Description(){
-    return (
-      <div>
-        <div className={classes.content}>
-          <TextArea ref={inputRef} autoSize placeholder="添加评论">{content}</TextArea>
-        </div>
-        <div className={classes.description}>
-          {imgList.map((item, index)=>{
-            return (
-              <div key={index}>
-                <img src={item}/>
-              </div>
-            )
-          })}
-          {<div className={classes.addImg}><PlusSquareOutlined className={classes.iconStyle}/></div>}
-        </div>
-      </div>
-      
-    )
+    form.submit()
   }
 
   return (
@@ -56,13 +53,24 @@ export function AddMoment(props){
         <CloseCircleOutlined className={classes.iconStyle} onClick={goBack}/>
         <span onClick={publish}>发布</span>
       </header>
-      <main>
-        <Card>
-          <Meta
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-            description={Description()}
-          />
-        </Card>
+      <main className={classes.main}>
+        <header className={classes.userInfo}>
+          <Avatar src={headIcon}></Avatar>
+          <span>{username}</span>
+        </header>        
+        <Form
+          name="addMoment"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+          form={form}
+        >
+          <Form.Item
+            name="content"
+          >
+            <TextArea autoSize ref={inputRef} placeholder='动态内容'/>
+          </Form.Item>
+        </Form>
       </main>
       <TokenTest></TokenTest>
     </div>
