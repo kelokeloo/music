@@ -15,14 +15,6 @@ import { baseUrl } from '../../../global.conf'
 import http from '../../../Api/common/http'
 
 
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
 
 
 
@@ -46,48 +38,52 @@ export function AddMoment(props){
   }
 
   
-
-  // 表单相关
-  const [form] = Form.useForm();
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
   // 图片上传
   const uploadAddress = '/api/upload'
+  const [uploadImageList, setUploadImageList] = useState({
+    list: []
+  })
 
   const fileInputRef = useRef(null)
 
-  function handleUpload(){
-    const files = fileInputRef.current.files
+  function publish(){
     const content = inputRef.current.resizableTextArea.props.value
-    console.log('content', content);
-    const formData = new FormData()
+    
     // 存放value值
-    formData.append('content', content)
+    console.log(content);
+    
+    
+  }
+
+  function handleInputChange(e){
+    const file =  fileInputRef.current.value
+    const formData = new FormData()
+    
+    const files = fileInputRef.current.files
     for(let i =0; i < files.length; i++){
       formData.append('photos', files[i])
     }
+
     http.post(uploadAddress, formData,{
       headers:{
         "Content-Type":"multipart/form-data"
       }
     })
     .then(data=>{
-      console.log(data);
+      console.log('data', data);
+      let imgList = data.imgList
+      imgList = imgList.map(item=>{
+        return baseUrl + '/images/moment/' + item
+      })
+      let list = uploadImageList.list
+      list = [...list, ...imgList]
+      console.log(list);
+      setUploadImageList({
+        list: list
+      })
     })
   }
 
-  
-
-  // 点击发布
-  function publish(){
-    console.log('发布');
-    form.submit()
-  }
 
   return (
     <div className={classes.box}>
@@ -100,25 +96,17 @@ export function AddMoment(props){
           <Avatar src={headIcon}></Avatar>
           <span>{username}</span>
         </header>        
-        <Form
-          name="addMoment"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-          form={form}
-        >
-          <Form.Item
-            name="content"
-          >
-            <TextArea autoSize ref={inputRef} placeholder='动态内容'/>
-          </Form.Item>
-        </Form>
-
-        
-        <input type="file" multiple name='photos' ref={fileInputRef}/>
-        <Button onClick={handleUpload}>上传</Button>
-        
-          
+        <div className={classes.form}>
+          <TextArea autoSize ref={inputRef} placeholder='动态内容'/>
+          <input type="file" multiple name='photos' ref={fileInputRef} onChange={handleInputChange}/>
+        </div>
+        <div>
+          {
+            uploadImageList.list.map((item,index)=>{
+              return <img key={index} src={item}/>
+            })
+          }
+        </div>
       </main>
       <TokenTest></TokenTest>
     </div>
