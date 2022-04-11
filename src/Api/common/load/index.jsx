@@ -145,6 +145,21 @@ export function musicMark(musicId){
   })
 }
 
+/**
+ * 获取动态信息
+ */
+ export function getMoments(moment){
+  return http.get(`/api/moments/`)
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
+
+
 
 
 

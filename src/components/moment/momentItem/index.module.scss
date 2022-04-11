@@ -1,3 +1,5 @@
+@import '../../../css/global.scss';
+
 .description {
 
   
@@ -51,5 +53,18 @@ $box-Radius: .5rem;
   margin-top: .5rem;
   >span{
     margin-right: 1rem;
+  }
+}
+
+.comment {
+  background-color: $shadow;
+  border-radius: .5rem;
+  padding: .2rem;
+}
+
+.comentInput {
+  display: flex;
+  .btn {
+    flex-shrink: 0;
   }
 }

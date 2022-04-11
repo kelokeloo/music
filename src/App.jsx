@@ -11,6 +11,7 @@ import { Chat } from './views/Chat/chat'
 import { Me } from './views/Me/me';
 import { Search } from './views/Search/search';
 import { AddMoment } from './views/Moment/addMoment';
+import { MomentDetail } from './views/Moment/momentDetail'
 import { Album } from './views/Album/album'
 import { Login } from './views/Login/login'
 import { Forget } from './views/Login/forget'
@@ -115,6 +116,7 @@ function App() {
               <Route path="moment" element={<Outlet />}>
                 <Route index element={<Moment />}></Route>
                 <Route path="add" element={<AddMoment />}></Route>
+                <Route path="detail" element={<MomentDetail />}></Route>
               </Route>
               <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
               <Route path="chat" element={<Chat />} />

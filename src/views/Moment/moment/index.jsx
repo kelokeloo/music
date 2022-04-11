@@ -8,17 +8,57 @@ import { useNavigate } from 'react-router';
 
 import { TokenTest } from '../../../components/common/tokenTest'
 
+// 获取moment数据
+import { getMoments } from '../../../Api/common/load'
+
+import { useEffect, useState } from 'react';
+
+import { baseUrl } from '../../../global.conf'
+
 export function Moment(){
   const navigateTo = useNavigate()
   function goToAddMoment(){
     navigateTo('/moment/add')
   }
+  const [moments, setMoments] = useState({
+    list: []
+  })
+
+  useEffect(()=>{
+    getMoments()
+    .then(data=>{
+      let list = data.moments
+      // 数据处理 添加baseUrl
+      list = list.map(item=>{
+        item.headIcon = baseUrl + item.headIcon
+        item.imgList = item.imgList.map(item=>{
+          return baseUrl + item
+        })
+        return item
+      })
+
+      console.log(list);
+      setMoments({
+        list
+      })
+    })
+  }, [])
+
+
   
   return (
     <div className={classes.box}>
       <header><PlusCircleOutlined className={classes.iconStyle} onClick={goToAddMoment}/></header>
       <div>
-        <MomentCard></MomentCard>
+        {
+          moments.list.map(moment=>{
+            return (
+              <MomentCard key={moment.time} 
+                {...moment}
+              ></MomentCard>
+            )
+          })
+        }
       </div>
       <TokenTest></TokenTest>
     </div>
