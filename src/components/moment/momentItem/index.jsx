@@ -1,206 +1,156 @@
-// 有问题需要重构 
-
-import { Skeleton, Switch, Card, Avatar, Input, Button } from 'antd';
-const { TextArea } = Input
-const { Meta } = Card;
-
-import { useState } from 'react'
-
 import classes from './index.module.scss'
-
-import { CommentOutlined, HeartOutlined, SendOutlined} from '@ant-design/icons'
-
-import moment from 'moment'
+import { Avatar, Input, Button } from 'antd';
+const { TextArea } = Input
+import { HeartOutlined, MessageOutlined, SendOutlined } from '@ant-design/icons';
+import { useState } from 'react'
+import moment from 'moment';
+import { addComment } from '../../../Api/common/load'
 
 export function MomentCard(props){
-  const {username, userID,  time, like, imgList, headIcon, content, comment} = props
+  const { username, userID , time,like,imgList,headIcon,content,comment } = props
 
-  const [loading, setLoading] = useState(false)
- 
-  const onChange = checked => {
-    setLoading(true)
-  };
-
-  const [commentList, setCommentList] = useState({
+  function CreateImgs(props){
+    const { list } = props
+    return list.map(item=>{
+      return (
+        <div key={item} className={classes.imgBox}>
+          <img src={item}/>
+        </div>
+      )
+    })
+  }
+  // 评论列表数据
+  const [comments, setComments] = useState({
     list: comment
   })
 
-  // 回复的目标
-  const [responseTargetName, setResponseTargetName] = useState({
-    name: 'default'
+  
+
+  // 控制输入是否显示
+  const [inputVisible, setInputVisible] = useState(false)
+  const [inputValue, setInputValue] = useState('')
+  const [placeholder, setPlaceholder] = useState('default')
+  const [commentInfo, setCommentInfo] = useState({
+    belongUserID: "",
+    belongUserName: "",
+    toUserID: "",
+    toUserName: ""
   })
 
-  // 控制评论输入是否显示
-  const [inputVisible, setInputVisible] = useState(false)
-  
-  // 处理子项点击
-  function handleCommentItem(item){
-    console.log('click', item);
-    // 构造发布参数
-    const commentInfo = {
+  // input 双向绑定
+  function inputChange(ev){
+    setInputValue(ev.target.value)
+  }
+
+  // 点击评论图标
+  function handleCommentIconClick(){
+    const state = !inputVisible
+    setInputVisible(state)
+    // 设置提示值
+    setPlaceholder(`回复 ${username}`)
+    // 设置评论相关信息
+    const info = {
       belongUserID: window.sessionStorage.getItem('userid'),
       belongUserName: window.sessionStorage.getItem('username'),
-      toUserID: item.belongUserID,
-      time: moment().format(),
-      toUserName: item.belongUserName,
-      content: commentData.info.content
+      toUserID: userID,
+      toUserName: username
     }
+    setCommentInfo(info)
+  }
+  // 点击评论项
+  function handleCommentItemClick(username, userID){
+    setInputVisible(true)
+    // 设置提示值
+    setPlaceholder(`回复 ${username}`)
+    // 设置评论相关信息
+    const info = {
+      belongUserID: window.sessionStorage.getItem('userid'),
+      belongUserName: window.sessionStorage.getItem('username'),
+      toUserID: userID,
+      toUserName: username
+    }
+    setCommentInfo(info)
   }
 
-  // 评论子项
-  function CommentItem(props){
-    const { belongUserID, belongUserName, toUserID, toUserName, content} = props
-
-    return (
-      <div onClick={()=>handleCommentItem(props)}>
-        <span>{belongUserName}</span>
-        <span>回复</span>
-        <span>{toUserName}</span>
-        <span> : </span>
-         {props.content}
-      </div>
-    )
+  // 发布评论
+  function doComment(){
+    // 评论格式数据
+    const info = {
+      belongUserID: commentInfo.belongUserID,
+      belongUserName: commentInfo.belongUserName,
+      content: inputValue,
+      time: moment().format(),
+      toUserID: commentInfo.toUserID,
+      toUserName: commentInfo.toUserName
+    }
+    // 同步本地
+    const list = [...comments.list, info]
+    setComments({list})
+    setInputVisible(false)
+    // 清除数据
+    setInputValue('')
+    // 同步远程 
+    const commentData = {
+      userID,
+      time,
+      info
+    }
+    addComment(commentData)
+    .then(data=>{
+      console.log('提交', commentData);
+    })
   }
 
-  
-  
-  // 创建评论
-  function CreateCommentList(props){
-    let { list } = props
-    list = list.map(item=>{
+
+  // 渲染评论，只做渲染, 组件内部不保存状态
+  function CreateComments(props){
+    const { list } = props
+    console.log(list);
+    return list.map((item, index)=>{
+      const { belongUserName, belongUserID, toUserName, time, content} = item
       return (
-        <CommentItem key={item.time} {...item} ></CommentItem>
+        <div key={index} onClick={()=>handleCommentItemClick(belongUserName, belongUserID)}>
+          <span>{belongUserName}</span>
+          <span> 回复 </span>
+          <span>{toUserName} : </span>
+          <span>{content}</span>
+        </div>
       )
     })
-    return list
-  }
-
-
-  function Description(props) {
-    let { imgList, content, comments, like } = props
-    
-    const [commentData, setCommentData] = useState({
-      info:{
-        belongUserID: '',
-        belongUserName: '',
-        toUserID: '',
-        toUserName: '',
-        content: ''
-      }
-    })
-    
-
-
-    imgList = imgList??{
-      length: 0
-    }
-    function imgStyleSwitcher(imgNum){
-      switch (imgNum) {
-        case 1:
-          return classes.listStyle1
-        case 2: 
-          return classes.listStyle2
-        default:
-          return classes.listStyle3
-      }
-    }
-    // 处理textArea输入
-    function handleTextAreaInput(value){
-      let detail = {
-        belongUserID: '',
-        belongUserName: '',
-        toUserID: '',
-        toUserName: '',
-        content: ''
-      }
-      detail.content = value
-      console.log('detail', detail);
-      setCommentData({
-        info: detail
-      })
-    }
-
-    // 点击评论
-    function handleCommentClick(){
-      setResponseTargetName({
-        name: username
-      })
-      
-      // 显示与隐藏评论输入框
-      let oldState = !inputVisible
-      setInputVisible(oldState)
-    }
-
-    // 发布评论
-    function publish(belongUserID, belongUserName, toUserID, toUserName){
-      // 填充发布参数
-      const commentInfo = {
-        belongUserID ,
-        belongUserName ,
-        toUserID,
-        time: moment().format(),
-        toUserName,
-        content: commentData.info.content
-      }
-
-      const list = [...commentList.list, commentInfo]
-      console.log('commentList', list);
-
-      
-
-      setCommentList({
-        list: list
-      })
-      setInputVisible(false)
-    }
-
-
-    return (
-      <div className={classes.description}>
-        <p>{content}</p>
-        <div className={imgStyleSwitcher(imgList.length)}>
-          {imgList.map((item,index)=><div key={index}><img src={item}></img></div>)}
-        </div>
-        <div className={classes.Options}>
-          <span>
-            {/* 评论按钮 */}
-            <CommentOutlined onClick={()=>handleCommentClick()}/>
-          </span>
-          <span>
-            <HeartOutlined /> <span>{like}</span>
-          </span>
-        </div>
-        <div className={classes.comment}>
-          <CreateCommentList list={commentList.list}></CreateCommentList>
-          {
-            inputVisible ? (
-              <span className={classes.comentInput}>
-                <TextArea placeholder={`回复给：${responseTargetName.name}`} autoSize value={commentData.info.value} onChange={(ev)=>{handleTextAreaInput(ev.target.value)}}></TextArea>
-                <Button className={classes.btn} 
-                  onClick={()=>publish(
-                    window.sessionStorage.getItem('userid'),
-                    window.sessionStorage.getItem('username'),
-                    userID,
-                    username
-                  )}
-                ><SendOutlined /></Button>
-              </span>
-            ) : ''
-          }
-        </div>
-      </div>
-    )
   }
 
   return (
-    <div>
-      <Card style={{ marginTop: 16 }} loading={loading}>
-        <Meta
-          avatar={<Avatar src={headIcon} />}
-          title={username}
-          description={<Description imgList={imgList} content={content} like={like} comments={commentList.list}></Description>}
-        />
-      </Card>
+    <div className={classes.box}>
+      <header className={classes.header}>
+        <Avatar src={headIcon}></Avatar>
+        <h3>{username}</h3>
+      </header>
+      <div className={classes.content}>
+        <div>{content}</div>
+        <div className={classes.imgList}>
+          <CreateImgs list={imgList}></CreateImgs>
+        </div>
+        <div className={classes.options}>
+          <MessageOutlined onClick={handleCommentIconClick}/>
+          <HeartOutlined /> <span>{like}</span>
+        </div>
+        <div className={classes.comments}>
+          <CreateComments list={comments.list}></CreateComments>
+        </div>
+        {
+          inputVisible?(
+            <div className={classes.commentInput}>
+              <TextArea autoSize 
+                value={inputValue} onChange={inputChange}
+                placeholder={placeholder}
+              ></TextArea>
+              <Button icon={<SendOutlined />}
+                onClick={doComment}
+              ></Button>
+            </div>
+          ): ''
+        }
+      </div>
     </div>
   )
 }

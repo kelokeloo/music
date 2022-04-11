@@ -37,7 +37,6 @@ export function Moment(){
         return item
       })
 
-      console.log(list);
       setMoments({
         list
       })
