@@ -1,7 +1,7 @@
 import classes from './index.module.scss'
 
 import { CloseCircleOutlined, PlusSquareOutlined, PlusOutlined  } from '@ant-design/icons'
-import { Card, Avatar, Input, Form, Upload, Modal,Button   } from 'antd';
+import { Card, Avatar, Input, Form, Upload, Modal,Button, message   } from 'antd';
 const { TextArea } = Input;
 const { Meta } = Card;
 import { useRef, useEffect, useState } from 'react'
@@ -14,6 +14,8 @@ import { baseUrl } from '../../../global.conf'
 import { publishMoment } from '../../../Api/common/load'
 
 import http from '../../../Api/common/http'
+//time
+import moment from 'moment';
 
 
 
@@ -56,10 +58,18 @@ export function AddMoment(props){
     })
     const data = {
       content, 
-      imgList: list
+      imgList: list,
+      time: moment().format()
     }
     publishMoment(data)
     .then(data=>{
+      if(data.code === 200){
+        message.success('发布成功')
+        navigateTo('/moment')
+      }
+      else{
+        message.error('发布失败')
+      }
       console.log(data);
     })
     
