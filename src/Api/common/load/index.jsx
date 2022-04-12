@@ -162,7 +162,6 @@ export function musicMark(musicId){
  * 评论
  */
 
-
 export function addComment(commentData){
   return http.post('/api/moment/comment', commentData)
   .then(data=>{
@@ -172,6 +171,20 @@ export function addComment(commentData){
     console.error(e)
   })
 }
+
+/**
+ * 喜欢
+ */
+ export function setLike(likeInfo){
+  return http.post('/api/moment/like', likeInfo)
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
 
 
 

@@ -4,7 +4,7 @@ const { TextArea } = Input
 import { HeartOutlined, MessageOutlined, SendOutlined } from '@ant-design/icons';
 import { useState } from 'react'
 import moment from 'moment';
-import { addComment } from '../../../Api/common/load'
+import { addComment, setLike } from '../../../Api/common/load'
 
 export function MomentCard(props){
   const { username, userID , time,like,imgList,headIcon,content,comment } = props
@@ -24,7 +24,9 @@ export function MomentCard(props){
     list: comment
   })
 
-  
+  // 是否喜欢该动态
+  const loginUserID = window.sessionStorage.getItem('userid')
+  const likeOrNot = like.includes(loginUserID)
 
   // 控制输入是否显示
   const [inputVisible, setInputVisible] = useState(false)
@@ -36,6 +38,11 @@ export function MomentCard(props){
     toUserID: "",
     toUserName: ""
   })
+  // like
+  const [likeList, setLikelist] = useState({
+    list: like
+  })
+  const [likeState, setLikeState] = useState(likeOrNot)
 
   // input 双向绑定
   function inputChange(ev){
@@ -101,6 +108,39 @@ export function MomentCard(props){
     })
   }
 
+  
+  // 点击喜欢
+  function handleLikeClick(){
+    const state = !likeState
+    // 先移除
+    const loginID = window.sessionStorage.getItem('userid')
+    const list = likeList.list
+    const index = list.findIndex(item=>item===loginID)
+    if(index >= 0){
+      list.splice(index, 1)
+    }
+    if(state){// 再添加
+      list.push(loginID)
+    }
+    // 同步到服务器
+    // 构建所需数据
+    const likeInfo = {
+      userID,
+      time,
+      list
+    }
+    // 发送
+    setLike(likeInfo)
+    .then(data=>{
+      console.log(data);
+    })
+
+    setLikelist({
+      list: list
+    })
+    setLikeState(state)
+  }
+
 
   // 渲染评论，只做渲染, 组件内部不保存状态
   function CreateComments(props){
@@ -132,7 +172,9 @@ export function MomentCard(props){
         </div>
         <div className={classes.options}>
           <MessageOutlined onClick={handleCommentIconClick}/>
-          <HeartOutlined /> <span>{like}</span>
+          <HeartOutlined className={likeState?classes.activeIcon:''} 
+            onClick={handleLikeClick}
+          /> <span className={likeState?classes.activeIcon:''}>{likeList.list.length}</span>
         </div>
         <div className={classes.comments}>
           <CreateComments list={comments.list}></CreateComments>
