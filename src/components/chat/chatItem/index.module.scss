@@ -1,0 +1,20 @@
+@import '../../../css/global.scss'; 
+.box {
+  display: flex;
+  border-bottom: 1px solid $lineColor;
+  align-items: center;
+  .main {
+    height: 4rem;
+    margin-left: 1rem;
+    flex: 1;
+    // padding-bottom: .5rem;
+    div:nth-child(1){
+      display: flex;
+      justify-content: space-between;
+      span:nth-child(1){
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+    }
+  }
+}

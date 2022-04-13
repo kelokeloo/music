@@ -1,0 +1,49 @@
+@import '../../../css/global.scss';
+
+.box {
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  position: absolute;
+  background-color: white;
+  z-index: 3;
+  //
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContainer {
+  flex: 1;
+  overflow: auto;
+}
+
+
+.header {
+  height: 3rem;
+  box-sizing: border-box;
+  padding-left: 1rem;
+  // padding: 1rem;
+  display: flex;
+  align-items: center; 
+  border-bottom: 1px solid $lineColor;
+}
+.main{
+  height: 100%;
+  padding: 1rem; 
+  background-color: rgb(238, 238, 238);
+}
+
+.iconStyle {
+  font-size: $IconSize;
+  svg {
+    color: $themeColor;
+  }
+}
+
+.input {
+  bottom: 0;
+  display: flex;
+  button {
+    width: 3rem;
+  }
+}

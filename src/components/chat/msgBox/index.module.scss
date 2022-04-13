@@ -1,0 +1,71 @@
+.box {
+  margin-bottom: 1rem;
+}
+
+// left
+.leftBox {
+  box-sizing: border-box;
+  width: 100%;
+  &>:nth-child(1){
+    flex-shrink: 0;
+  }
+  display: flex;
+  >div{
+    width: 90%;
+  }
+}
+.leftTitle{
+  span{
+    margin-left: 1rem;
+  }
+}
+.leftMain{
+  // 换行
+  min-width: auto;
+  max-width: 80%;
+  word-wrap: break-word;
+
+  border-radius: .5rem;
+  padding: .2rem;
+  background-color: white;
+  margin-left: 1rem;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+
+// right
+.rightBox {
+  display: flex;
+  flex-direction: row-reverse;
+  >div{
+    width: 90%;
+  }
+}
+.rightTitle{
+  display: flex;
+  flex-direction: row-reverse;
+  span{
+    margin-right: 1rem;
+  }
+}
+.rightMain{
+  // 换行
+  width: 80%;
+  display: flex;
+  flex-direction: row-reverse;
+  >div{
+    display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
+    border-radius: .5rem;
+    padding: .2rem;
+    background-color: white;
+  }
+  margin-left: 3rem;
+  
+
+}
+
+
+

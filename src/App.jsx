@@ -16,6 +16,7 @@ import { Album } from './views/Album/album'
 import { Login } from './views/Login/login'
 import { Forget } from './views/Login/forget'
 import { CreateAccount } from './views/Login/createAccount'
+import { ChatDialog } from './views/Chat/chatDialog'
 
 // footerNav
 import { Nav } from './components/nav'
@@ -119,7 +120,10 @@ function App() {
                 <Route path="detail" element={<MomentDetail />}></Route>
               </Route>
               <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
-              <Route path="chat" element={<Chat />} />
+              <Route path="chat" element={<Outlet />} >
+                <Route index element={<Chat />}></Route>
+                <Route path='dialog/:dialogId' element={<ChatDialog />}></Route>
+              </Route>
               <Route path="me" element={<Me />} />
               <Route path="search" element={<Search loadMusic={loadMusic} />} />
             </Route>

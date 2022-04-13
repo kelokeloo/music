@@ -185,6 +185,51 @@ export function addComment(commentData){
   })
 }
 
+/**
+ * 获取用户信息
+ * 
+ */
+
+export function getUserInfo(userId){
+  return http.get(`/api/userInfo/${userId}`)
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
+
+/**
+ * 获取登录用户私信对话框列表
+ */
+ export function getChatList(){
+  return http.get('/api/chatlist')
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
+/**
+ * 获取指定对话框的对话数据
+ */
+
+export function getDialogData(dialogId){
+  return http.get(`/api/msglist/${dialogId}`)
+  .then(data=>{
+    return data
+  })
+  .catch(e=>{
+    console.error(e)
+  })
+}
+
+
+
 
 
 
