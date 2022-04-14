@@ -35,7 +35,7 @@ import classes from './App.module.scss'
 
 
 function App(props) { 
-  const { socket } = props
+  const { socket, messagePool } = props
 
   // nav
   const [ actived, setActived] = useState(0)
@@ -125,8 +125,8 @@ function App(props) {
               </Route>
               <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
               <Route path="chat" element={<Outlet />} >
-                <Route index element={<Chat />}></Route>
-                <Route path='dialog/:dialogId' element={<ChatDialog socket={socket} />}></Route>
+                <Route index element={<Chat messagePool={messagePool} />}></Route>
+                <Route path='dialog/:dialogId' element={<ChatDialog socket={socket} messagePool={messagePool}/>}></Route>
               </Route>
               <Route path="me" element={<Me />} />
               <Route path="search" element={<Search loadMusic={loadMusic} />} />

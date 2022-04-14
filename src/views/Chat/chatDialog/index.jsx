@@ -15,7 +15,7 @@ import moment from 'moment';
 
 
 export function ChatDialog(props){
-  const { socket } = props
+  const { socket, messagePool } = props
   const navigateTo = useNavigate()
   function goback(){
     navigateTo(-1)
@@ -74,7 +74,11 @@ export function ChatDialog(props){
       musicId : "",
       time : moment().format()
     }
-    console.log(info);
+    // console.log(info);
+    socket.send(JSON.stringify({
+      type: 'message',
+      message: info
+    }))
   }
 
 
@@ -86,9 +90,9 @@ export function ChatDialog(props){
       <div className={classes.mainContainer}>
         <div className={classes.main}>
           {
-            msgList.list.map(item=>{
+            msgList.list.map((item, index)=>{
               return (
-                <MsgBox key={`${item.time}_${item.belong}`}
+                <MsgBox key={`${item.time}_${item.belong}_${index}`}
                   {...item}
                 ></MsgBox>
               )

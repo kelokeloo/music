@@ -15,7 +15,8 @@ import { useEffect, useState } from "react";
 import { baseUrl } from '../../../global.conf'
 import moment from "moment";
 
-export function Chat(){
+export function Chat(props){
+  const { messagePool } = props
   // 对话列表数据
   const [chatList, setChatList] = useState({
     list: []
@@ -68,6 +69,33 @@ export function Chat(){
       })
     })
   }, [])
+
+  useEffect(()=>{
+    const time = setInterval(()=>{
+      let copyChatList = JSON.parse(JSON.stringify(chatList))
+      // 添加新信息
+      copyChatList.list = copyChatList.list.map(item=>{
+        const dialogId = item._id
+        const index = messagePool.pool.findIndex(item=>item.dialogId === dialogId)
+        if(index >= 0){
+          const lastIndex = messagePool.pool[index].msgs.length - 1
+          const newMsg = messagePool.pool[index].msgs[lastIndex]
+          console.log(dialogId, index, lastIndex, newMsg);
+          item.content = newMsg.text
+          item.time = newMsg.time
+        }
+        
+        return item
+      })
+
+      setChatList(copyChatList)
+
+    }, 2000)  
+    return ()=>{
+      clearInterval(time)
+    }
+  })
+
   
   return (
     <div className={classes.box}>
@@ -81,6 +109,9 @@ export function Chat(){
               <ChatItem key={item._id} {...item}></ChatItem>
             )
           })
+        }
+        {
+          JSON.stringify(chatList.list)
         }
       </div>
       <TokenTest></TokenTest>

@@ -20,7 +20,7 @@ export function MsgBox(props){
                 <span>{moment(time).fromNow()}</span>
               </div>
               <div className={classes.leftMain}>
-                message
+                {text}
               </div>
             </div>
           </div>
@@ -35,7 +35,7 @@ export function MsgBox(props){
               <div className={classes.rightMain}>
                 <div>
                   <span>
-                  message
+                  {text}
                   </span>
                 </div>
               </div>
