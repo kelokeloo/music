@@ -12,7 +12,7 @@ import { baseUrl } from '../../../global.conf';
 
 
 
-const onFinish = async (values, callback) => {
+const onFinish = async (values, callback, socket) => {
   // 发起登录请求
   const data = await login({...values})
   console.log(data);
@@ -27,6 +27,14 @@ const onFinish = async (values, callback) => {
     window.sessionStorage.setItem('userid', data.data.userID)
     window.sessionStorage.setItem('headIcon', baseUrl + data.data.headIcon)
     window.sessionStorage.setItem('username', data.data.username)
+
+    // 登录成功之后向服务器发送用户id，id绑定到具体的socket
+    const wsConfig = {
+      type: 'connect',
+      userId: window.sessionStorage.getItem('userid')
+    }
+    socket.send(JSON.stringify(wsConfig))
+
     // 跳转到首页
     callback('/')
     return true
@@ -44,6 +52,7 @@ const onFinishFailed = (errorInfo) => {
 };
 
 export function Login(props){
+  const { socket } = props
   const navigateTo = useNavigate()
   return (
     <div className={classes.box}>
@@ -53,7 +62,7 @@ export function Login(props){
         initialValues={{
           remember: true,
         }}
-        onFinish={(values)=>{onFinish(values, navigateTo)}}
+        onFinish={(values)=>{onFinish(values, navigateTo, socket)}}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >

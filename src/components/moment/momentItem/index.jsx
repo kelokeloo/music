@@ -145,7 +145,6 @@ export function MomentCard(props){
   // 渲染评论，只做渲染, 组件内部不保存状态
   function CreateComments(props){
     const { list } = props
-    console.log(list);
     return list.map((item, index)=>{
       const { belongUserName, belongUserID, toUserName, time, content} = item
       return (

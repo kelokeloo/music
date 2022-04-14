@@ -51,7 +51,6 @@ export function Moment(){
       <div>
         {
           moments.list.map(moment=>{
-            console.log('moment', moment);
             return (
               <MomentCard key={moment.time} 
                 {...moment}

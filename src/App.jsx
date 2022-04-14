@@ -32,7 +32,11 @@ import classes from './App.module.scss'
 
 
 
-function App() { 
+
+
+function App(props) { 
+  const { socket } = props
+
   // nav
   const [ actived, setActived] = useState(0)
   const navigateTo = useNavigate()
@@ -122,7 +126,7 @@ function App() {
               <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
               <Route path="chat" element={<Outlet />} >
                 <Route index element={<Chat />}></Route>
-                <Route path='dialog/:dialogId' element={<ChatDialog />}></Route>
+                <Route path='dialog/:dialogId' element={<ChatDialog socket={socket} />}></Route>
               </Route>
               <Route path="me" element={<Me />} />
               <Route path="search" element={<Search loadMusic={loadMusic} />} />
@@ -130,7 +134,7 @@ function App() {
             <Route />
             
             <Route path='/login' element={<Outlet></Outlet>}>
-              <Route index element={<Login></Login>}></Route>
+              <Route index element={<Login socket={socket}></Login>}></Route>
               <Route path='forget' element={<Forget></Forget>}></Route>
               <Route path='create' element={<CreateAccount></CreateAccount>}></Route>
             </Route>

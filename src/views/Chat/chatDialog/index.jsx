@@ -11,9 +11,11 @@ import { useState, useEffect } from 'react';
 import { getDialogData } from '../../../api/common/load'
 import { MsgBox } from '../../../components/chat/msgBox'
 import { baseUrl } from '../../../global.conf'
+import moment from 'moment';
 
 
 export function ChatDialog(props){
+  const { socket } = props
   const navigateTo = useNavigate()
   function goback(){
     navigateTo(-1)
@@ -63,6 +65,18 @@ export function ChatDialog(props){
     })
   }, [])
 
+  // 发送数据
+  function sendMsg(){
+    const info = {
+      dialogId,
+      belong : window.sessionStorage.getItem('userid'),
+      text : inputValue,
+      musicId : "",
+      time : moment().format()
+    }
+    console.log(info);
+  }
+
 
   return (
     <div className={classes.box}>
@@ -89,7 +103,9 @@ export function ChatDialog(props){
           value={inputValue}
           onChange={handleInputValueChange}
         />
-        <Button icon={<SendOutlined />}></Button>
+        <Button icon={<SendOutlined />}
+          onClick={sendMsg}
+        ></Button>
       </div>
     </div>
   )

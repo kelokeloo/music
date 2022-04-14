@@ -3,10 +3,9 @@ import moment from 'moment';
 import classes from './index.module.scss'
 
 export function MsgBox(props){
-  console.log('props', props);
   const { belong, text, time, musicId, username, headIcon} = props
   const loginId = window.sessionStorage.getItem('userid')
-  let state = loginId === belong ? 'right' : 'left'
+  let state = loginId === belong ? 'left' : 'right'
 
 
   return (
