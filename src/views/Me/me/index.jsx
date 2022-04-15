@@ -3,10 +3,15 @@ import classes from './index.module.scss'
 import { Avatar, Card  } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
+import { useEffect, useState } from 'react'
+
 import { TokenTest } from '../../../components/common/tokenTest'
+import { getUserInfo } from '../../../Api/common/load'
 
 export function Me(){
-  const name = 'kelokeloo'
+  const userId = window.sessionStorage.getItem('userid')
+  const name = window.sessionStorage.getItem('username')
+  const headIcon = window.sessionStorage.getItem('headIcon')
   const attention = 36
   const fans = 99
   const like = 120
@@ -17,11 +22,23 @@ export function Me(){
       <h3 className={classes.cardTitle}>{label}</h3>
     )
   }
+  
+  // 
+  const [focus, setFocus] = useState(0)
+
+  useEffect(()=>{
+    getUserInfo(userId)
+    .then(({userInfo})=>{
+      setFocus(userInfo.userFocusList.length)
+    })
+  }, [])
+
+
 
   return (
     <div className={classes.box}>
       <div className={classes.info}>
-        <Avatar size={64} icon={<UserOutlined />}></Avatar>
+        <Avatar size={64} icon={<UserOutlined />} src={headIcon}></Avatar>
         <div className={classes.name}><h1>{name}</h1></div>
         <div className={classes.data}>
           <span>{attention} 关注</span>
