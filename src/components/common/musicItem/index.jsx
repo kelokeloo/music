@@ -5,7 +5,7 @@ import { musicMark } from '../../../Api/common/load'
 export function MusicItem(props){
   const { imgUrl, musicUrl, name, singer, loadMusic, id} = props
   function handleClick(){
-    loadMusic({ musicUrl, name, singer, imgUrl })
+    loadMusic({ musicUrl, name, singer, imgUrl, id })
     musicMark(id)
   }
 

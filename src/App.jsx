@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css'
 
@@ -94,7 +94,8 @@ function App(props) {
     info:{
       name: '',
       singer: '',
-      imgUrl: ''
+      imgUrl: '',
+      id: ''
     }
   })
   const [musicDuration, setMusicDuration] = useState(0)
@@ -127,13 +128,15 @@ function App(props) {
 
   // 加载音乐
   const loadMusic = (music)=>{
-    const { musicUrl, name, singer, imgUrl } = music
+    const { musicUrl, name, singer, imgUrl, id } = music
     setPlayingMusic(musicUrl)
     setMusicInfo({
       info: {
         name,
         singer,
-        imgUrl
+        imgUrl,
+        id,
+        musicUrl
       }
     })
     setIsPlaying(false)
@@ -148,16 +151,59 @@ function App(props) {
         setMusicDuration(parseInt(audio.duration))
       });
       
-      // 播放停止之后做的事情
-      audioEle.addEventListener('ended', ()=>{
-        console.log('播放结束');
-      })
+      
     }, 0)
 
   }
+
+  useEffect(()=>{
+    // 先移除事件再添加事件
+    // 播放停止之后做的事情
+    function listener(){
+      console.log('播放结束');
+      if(playList.list.length !== 0){
+        // 播放下一首
+        const curMusicId = musicInfo.info.id
+        console.log('当前播放id', curMusicId);
+        // 
+        let index = playList.list.findIndex(item=>item.id === curMusicId)
+        const length = playList.list.length
+        console.log(index, length - 1);
+        if(index < length - 1){// 不是最后一首的时候
+          index++
+          const musicInfo={
+            name: playList.list[index].name,
+            singer: playList.list[index].singer,
+            imgUrl: playList.list[index].imgUrl,
+            id: playList.list[index].id,
+            musicUrl: playList.list[index].musicUrl
+          }
+          loadMusic(musicInfo)
+        }
+        else{
+          // 最后一首的时候
+          console.log('最后一首');
+          playerRef.current.pause()
+        }
+      }
+      console.log('playList', playList);
+    }
+    // 移除
+    playerRef.current.removeEventListener('ended', listener)
+    
+    // 添加事件
+    playerRef.current.addEventListener('ended', listener)
+
+  }, [playList])
+
+ 
+
   // 加载播放列表
   function loadPlayList(list){
     console.log('playList', list);
+    setPlayList({
+      list: list
+    })
   }
 
   const [showOptions, setShowOptions] = useState(true)
