@@ -45,12 +45,14 @@ function App(props) {
   console.log(location.pathname);
   let activeIndex = -1
   switch (location.pathname) {
+    case '/search':
     case '/':
       activeIndex = 0
       break;
     case '/chat':
       activeIndex = 1
       break;
+    case '/moment/add':
     case '/moment':
       activeIndex = 2
       break;
@@ -59,6 +61,7 @@ function App(props) {
       break;
   
     default:
+      activeIndex = -1
       break;
   }
 

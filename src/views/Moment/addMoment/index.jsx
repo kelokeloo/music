@@ -127,7 +127,7 @@ export function AddMoment(props){
             })
           }
           {
-            <a href="javascript:;">
+            <a>
               <PlusOutlined className={classes.iconStyle}></PlusOutlined>
               <input type="file" multiple name='photos' ref={fileInputRef} onChange={handleInputChange}/>
             </a>
