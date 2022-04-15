@@ -80,7 +80,7 @@ export function Chat(props){
         if(index >= 0){
           const lastIndex = messagePool.pool[index].msgs.length - 1
           const newMsg = messagePool.pool[index].msgs[lastIndex]
-          console.log(dialogId, index, lastIndex, newMsg);
+          // console.log(dialogId, index, lastIndex, newMsg);
           item.content = newMsg.text
           item.time = newMsg.time
         }
@@ -109,9 +109,6 @@ export function Chat(props){
               <ChatItem key={item._id} {...item}></ChatItem>
             )
           })
-        }
-        {
-          JSON.stringify(chatList.list)
         }
       </div>
       <TokenTest></TokenTest>
