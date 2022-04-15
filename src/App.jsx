@@ -97,7 +97,11 @@ function App(props) {
       imgUrl: ''
     }
   })
-  
+  const [musicDuration, setMusicDuration] = useState(0)
+  // 音乐播放列表
+  const [playList, setPlayList] = useState({
+    list: []
+  })
 
 
   //  点击播放按钮
@@ -134,8 +138,26 @@ function App(props) {
     })
     setIsPlaying(false)
     setTimeout(()=>{
-      playerRef.current.play()
+      const audioEle = playerRef.current
+      audioEle.play()
+
+      // 音乐持续时间
+      let audio = document.createElement('audio') //生成一个audio元素 
+      audio.src = musicUrl //音乐的路径 
+      audio.addEventListener("canplay", function() {
+        setMusicDuration(parseInt(audio.duration))
+      });
+      
+      // 播放停止之后做的事情
+      audioEle.addEventListener('ended', ()=>{
+        console.log('播放结束');
+      })
     }, 0)
+
+  }
+  // 加载播放列表
+  function loadPlayList(list){
+    console.log('playList', list);
   }
 
   const [showOptions, setShowOptions] = useState(true)
@@ -146,7 +168,7 @@ function App(props) {
         <div>
           <Routes>
             <Route path="/" element={<Outlet />}>
-              <Route index element={<Home loadMusic={loadMusic}></Home>}/>
+              <Route index element={<Home loadMusic={loadMusic} loadPlayList={loadPlayList}></Home>}/>
               <Route path="moment" element={<Outlet />}>
                 <Route index element={<Moment />}></Route>
                 <Route path="add" element={<AddMoment />}></Route>
@@ -184,6 +206,7 @@ function App(props) {
         <audio
           // controls
           // autoPlay
+          id='audio'
           ref={playerRef}
           src={playingMusic}
         >
@@ -196,6 +219,7 @@ function App(props) {
           songName={musicInfo.info.name}
           imgUrl={musicInfo.info.imgUrl}
           singer={musicInfo.info.singer}
+          duration = {musicDuration}
         ></Player>
       </div>
     </div>

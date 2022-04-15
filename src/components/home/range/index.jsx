@@ -8,7 +8,7 @@ import { baseUrl } from '../../../global.conf.js'
 import { MusicItem } from '../../common/musicItem'
 
 export function Range(props){
-  const { loadMusic } = props
+  const { loadMusic, loadPlayList } = props
   const [data, setData] = useState({
     list: [
       {
@@ -64,8 +64,16 @@ export function Range(props){
     }
   }, [])
 
+  // 处理排行榜的点击
+  function handleRangeClick(){
+    console.log('click range');
+    // 加载当前播放列表
+    const copyData = JSON.parse(JSON.stringify(data))
+    loadPlayList(copyData.list)
+  }
+
   return (
-    <div className={classes.range}>
+    <div className={classes.range} onClick={handleRangeClick}>
       <h2>排行榜</h2>
       <List
         itemLayout="horizontal"

@@ -7,18 +7,15 @@ import {
 } from '@ant-design/icons'
 
 import classes from './index.module.scss'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 import { Play } from '../../components/common/play'
 
 export function Player(props){
-  const { onPlayerClose, playState, onPlayStateChange,imgUrl, songName, singer } = props
-  let { duration } = props
-  console.log('props', props);
-  
-  duration = duration?? 200
+  const { onPlayerClose, playState, onPlayStateChange,imgUrl, songName, singer, duration } = props
+
 
   const [likeActive, setLikeActive] = useState(true)
 
@@ -30,7 +27,25 @@ export function Player(props){
   }
 
   // slider value
-  const [time, setTime] = useState(20)
+  const [time, setTime] = useState({
+    value: 0
+  })
+  useEffect(()=>{
+    setTime({value: 0})
+    const Interval = setInterval(() => {
+      setTime((time)=>{
+        if(time.value >= duration - 1){
+          clearInterval(Interval)
+        }
+        return {
+          value: time.value + 1
+        }
+      })
+    }, 1000);
+    return ()=>{
+      clearInterval(Interval)
+    }
+  }, [duration])
 
   // 拖动事件条
   const handleSliderClick = (val)=>{
@@ -94,13 +109,12 @@ export function Player(props){
               onChange={handleSliderClick}
               min={0}
               max={duration}
-              defaultValue={time}
+              value={time.value}
               step={1}
-              
               {...sliderLayout}
             ></Slider>
             <div className={classes.time}>
-              <span>{time}</span>
+              <span>{time.value}</span>
               <span>{duration}</span>
             </div>
           </div>
