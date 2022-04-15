@@ -72,6 +72,8 @@ export function Chat(props){
 
   useEffect(()=>{
     const time = setInterval(()=>{
+      console.log('messagePool', messagePool);
+
       let copyChatList = JSON.parse(JSON.stringify(chatList))
       // 添加新信息
       copyChatList.list = copyChatList.list.map(item=>{
@@ -89,6 +91,8 @@ export function Chat(props){
       })
 
       setChatList(copyChatList)
+
+      
 
     }, 2000)  
     return ()=>{

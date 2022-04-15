@@ -104,7 +104,7 @@ export function ChatDialog(props){
       scrollToBottom()
       
 
-    }, 3000)
+    }, 500)
     
     
     return ()=>{
