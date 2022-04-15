@@ -79,12 +79,14 @@ export function Chat(props){
       copyChatList.list = copyChatList.list.map(item=>{
         const dialogId = item._id
         const index = messagePool.pool.findIndex(item=>item.dialogId === dialogId)
+        item.hasNewMsg = false
         if(index >= 0){
           const lastIndex = messagePool.pool[index].msgs.length - 1
           const newMsg = messagePool.pool[index].msgs[lastIndex]
-          // console.log(dialogId, index, lastIndex, newMsg);
           item.content = newMsg.text
           item.time = newMsg.time
+          item.hasNewMsg = true
+          console.log(`${dialogId}有新消息`);
         }
         
         return item
@@ -108,9 +110,12 @@ export function Chat(props){
       </header>
       <div className={classes.main}>
         {
-          chatList.list.map(item=>{
+          chatList.list.map((item)=>{
             return (
-              <ChatItem key={item._id} {...item}></ChatItem>
+              <div key={item._id} className={classes.msgBox}>
+                <ChatItem {...item}></ChatItem>
+                {item.hasNewMsg ? <div className={classes.notify}></div>:<div>无</div>}
+              </div>
             )
           })
         }

@@ -28,6 +28,9 @@ import { Player } from './components/player'
 // style
 import classes from './App.module.scss'
 
+// router
+import { useLocation  } from 'react-router-dom'
+
 
 
 
@@ -38,7 +41,28 @@ function App(props) {
   const { socket, messagePool } = props
 
   // nav
-  const [ actived, setActived] = useState(0)
+  const location = useLocation();
+  console.log(location.pathname);
+  let activeIndex = -1
+  switch (location.pathname) {
+    case '/':
+      activeIndex = 0
+      break;
+    case '/chat':
+      activeIndex = 1
+      break;
+    case '/moment':
+      activeIndex = 2
+      break;
+    case '/me':
+      activeIndex = 3
+      break;
+  
+    default:
+      break;
+  }
+
+  const [ actived, setActived] = useState(activeIndex)
   const navigateTo = useNavigate()
   function handleNavClick(index){
     setActived(index)

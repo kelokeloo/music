@@ -23,3 +23,16 @@
     color: $themeColor;
   }
 }
+.msgBox {
+  position: relative;
+}
+.notify {
+  width: 10px;
+  height: 10px;
+  background-color: $themeColor;
+  position: absolute;
+  top: 0.2rem;
+  left: 2.5rem;
+  border-radius: 50%;
+  
+}
