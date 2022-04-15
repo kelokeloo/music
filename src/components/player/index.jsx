@@ -14,7 +14,10 @@ import 'rc-slider/assets/index.css';
 import { Play } from '../../components/common/play'
 
 export function Player(props){
-  const { onPlayerClose, playState, onPlayStateChange,imgUrl, songName, singer, duration } = props
+  const { onPlayerClose, 
+    playState, onPlayStateChange,imgUrl, songName, singer, duration, 
+    pre, next
+  } = props
 
 
   const [likeActive, setLikeActive] = useState(true)
@@ -119,11 +122,11 @@ export function Player(props){
             </div>
           </div>
           <div className={classes.ctrl}>
-            <BackwardOutlined className={classes.ctrlIconStyle}/>
+            <BackwardOutlined className={classes.ctrlIconStyle} onClick={pre}/>
             <span className={classes.playing} onClick={onPlayStateChange}>
               {playState ? <Play></Play> : <PauseOutlined className={classes.pauseStyle}/>}
             </span>
-            <ForwardOutlined className={classes.ctrlIconStyle} />
+            <ForwardOutlined className={classes.ctrlIconStyle} onClick={next}/>
           </div>
         </div>
       </div>

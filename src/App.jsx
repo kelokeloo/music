@@ -183,7 +183,8 @@ function App(props) {
         else{
           // 最后一首的时候
           console.log('最后一首');
-          playerRef.current.pause()
+          handlePlayingClick()
+          // playerRef.current.pause()
         }
       }
       console.log('playList', playList);
@@ -196,7 +197,32 @@ function App(props) {
 
   }, [playList])
 
- 
+  // 下一首上一首
+  const switchMusic = (options)=>{
+    console.log(options);
+    const curMusicId = musicInfo.info.id
+    console.log(playList);
+
+    // 找到当前音乐的下标
+    if(playList.list){
+      let index = playList.list.findIndex(item => item.id === curMusicId)
+      const length = playList.list.length
+      if(options === 'pre'){
+        index = index - 1
+      }
+      else {
+        index = index + 1
+      }
+      if(index >= 0 && index < length){
+        const music = playList.list[index]
+        loadMusic(music)
+      }
+    }
+
+
+  }
+
+
 
   // 加载播放列表
   function loadPlayList(list){
@@ -266,6 +292,8 @@ function App(props) {
           imgUrl={musicInfo.info.imgUrl}
           singer={musicInfo.info.singer}
           duration = {musicDuration}
+          pre={()=>{switchMusic('pre')}}
+          next={()=>{switchMusic('next')}}
         ></Player>
       </div>
     </div>
