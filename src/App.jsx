@@ -42,7 +42,6 @@ function App(props) {
 
   // nav
   const location = useLocation();
-  console.log(location.pathname);
   let activeIndex = -1
   switch (location.pathname) {
     case '/search':
@@ -98,6 +97,9 @@ function App(props) {
       imgUrl: ''
     }
   })
+  
+
+
   //  点击播放按钮
   const handlePlayingClick = ()=>{
     const state = !isPlaying
@@ -191,6 +193,9 @@ function App(props) {
       <div className={classes.player} ref={playerPageRef}>
         <Player onPlayerClose={handlePlayerClose} 
           playState={isPlaying} onPlayStateChange={handlePlayingClick}
+          songName={musicInfo.info.name}
+          imgUrl={musicInfo.info.imgUrl}
+          singer={musicInfo.info.singer}
         ></Player>
       </div>
     </div>

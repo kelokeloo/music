@@ -14,11 +14,10 @@ import 'rc-slider/assets/index.css';
 import { Play } from '../../components/common/play'
 
 export function Player(props){
-  const { onPlayerClose, playState, onPlayStateChange} = props
-  let { imgUrl, songName, singer, duration } = props
-  imgUrl = imgUrl??'/img/4.jpg'
-  songName = songName??'指纹'
-  singer = singer?? '杜宣达'
+  const { onPlayerClose, playState, onPlayStateChange,imgUrl, songName, singer } = props
+  let { duration } = props
+  console.log('props', props);
+  
   duration = duration?? 200
 
   const [likeActive, setLikeActive] = useState(true)
