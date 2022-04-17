@@ -17,6 +17,7 @@ import { Login } from './views/Login/login'
 import { Forget } from './views/Login/forget'
 import { CreateAccount } from './views/Login/createAccount'
 import { ChatDialog } from './views/Chat/chatDialog'
+import { Test } from './views/test'
 
 // footerNav
 import { Nav } from './components/nav'
@@ -255,7 +256,7 @@ function App(props) {
               <Route path="search" element={<Search loadMusic={loadMusic} />} />
             </Route>
             <Route />
-            
+            <Route path='/test' element={<Test></Test>}></Route>
             <Route path='/login' element={<Outlet></Outlet>}>
               <Route index element={<Login socket={socket}></Login>}></Route>
               <Route path='forget' element={<Forget></Forget>}></Route>
@@ -276,13 +277,10 @@ function App(props) {
       </div>
       <div className={classes.audio}>
         <audio
-          // controls
-          // autoPlay
           id='audio'
           ref={playerRef}
           src={playingMusic}
         >
-          <code>audio</code> element.
         </audio>
       </div>
       <div className={classes.player} ref={playerPageRef}>
