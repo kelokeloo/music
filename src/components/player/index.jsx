@@ -14,9 +14,12 @@ import 'rc-slider/assets/index.css';
 import { Play } from '../../components/common/play'
 
 export function Player(props){
-  const { onPlayerClose, 
-    playState, onPlayStateChange,imgUrl, songName, singer, duration, 
-    pre, next
+  const {  
+    duration, 
+    imgUrl, name, singer,
+    playState, 
+    play, pause, pre, next,
+    closePlayer
   } = props
 
 
@@ -55,7 +58,7 @@ export function Player(props){
     setTime(val)
   }
   
-  // sliderLayout 
+  // 时间滚动条样式 
   const sliderLayout = {
     railStyle: {
       backgroundColor: 'rgba(224, 224, 224, .5)',
@@ -67,7 +70,6 @@ export function Player(props){
     },
     handleStyle: {
       transform: 'translate(-50%, -13%)',
-      // border: '1px solid rgba(211, 58, 44)',
       border: 0,
       width: '1.5rem',
       height: '1.5rem',
@@ -76,17 +78,20 @@ export function Player(props){
     }
   }
 
+  // 播放暂停 🆗
+  function handlePlayerClick(){
+    if(playState){ // 播放状态
+      pause()
+    }
+    else{ // 暂停状态
+      play()
+    }
+  }
+
 
   return (
     <div className={classes.box}>
-      <div className={classes.shadow}
-        style={{
-          background: `url(${imgUrl}) center center no-repeat`,
-          fontSize: '2rem',
-          filter: 'blur(10px)'
-        }}
-      ></div>
-      <header className={classes.header} onClick={onPlayerClose}><CaretDownOutlined className={classes.iconStyle} /></header>
+      <header className={classes.header} onClick={closePlayer}><CaretDownOutlined className={classes.iconStyle} /></header>
       <div className={classes.mainBox}>
         <div className={classes.main}>
           <div className={classes.mainImg}>
@@ -103,15 +108,16 @@ export function Player(props){
               
           </div>
           <div className={classes.info}>
-            <span>{songName}</span>
+            <span>{name}</span>
             <span>{singer}</span>
           </div>
           <div>
-            <Slider
+            {/* 时间模块 */}
+            {/* <Slider
               className={classes.slider}
               onChange={handleSliderClick}
               min={0}
-              max={duration}
+              max={100}
               value={time.value}
               step={1}
               {...sliderLayout}
@@ -119,12 +125,12 @@ export function Player(props){
             <div className={classes.time}>
               <span>{time.value}</span>
               <span>{duration}</span>
-            </div>
+            </div> */}
           </div>
           <div className={classes.ctrl}>
             <BackwardOutlined className={classes.ctrlIconStyle} onClick={pre}/>
-            <span className={classes.playing} onClick={onPlayStateChange}>
-              {playState ? <Play></Play> : <PauseOutlined className={classes.pauseStyle}/>}
+            <span className={classes.playing} onClick={handlePlayerClick}>
+              {!playState ? <Play></Play> : <PauseOutlined className={classes.pauseStyle}/>}
             </span>
             <ForwardOutlined className={classes.ctrlIconStyle} onClick={next}/>
           </div>

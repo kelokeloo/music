@@ -1,0 +1,20 @@
+@import '../../../css/global.scss';
+
+.box {
+  display: flex;
+  align-items: center;
+  margin-bottom: .5rem;
+  >div:nth-child(1){
+    margin-right: .5rem;
+  }
+  >div:nth-child(2){
+    flex: 1;
+    h3 {
+      font-weight: bold;
+      margin: 0;
+    }
+    p {
+      margin: 0;
+    }
+  }
+}

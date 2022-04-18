@@ -31,7 +31,10 @@ import classes from './App.module.scss'
 
 // router
 import { useLocation  } from 'react-router-dom'
+import { getRange } from './Api/home';
+import { baseUrl } from './global.conf';
 
+import { message } from 'antd';
 
 
 
@@ -41,7 +44,7 @@ import { useLocation  } from 'react-router-dom'
 function App(props) { 
   const { socket, messagePool } = props
 
-  // nav
+  // 页面刷新的时候处理导航
   const location = useLocation();
   let activeIndex = -1
   switch (location.pathname) {
@@ -64,7 +67,7 @@ function App(props) {
       activeIndex = -1
       break;
   }
-
+  // 点击导航
   const [ actived, setActived] = useState(activeIndex)
   const navigateTo = useNavigate()
   function handleNavClick(index){
@@ -86,154 +89,110 @@ function App(props) {
     }
   }
 
-  // player
-  const [isPlaying, setIsPlaying] = useState(true)
-  const playerPageRef = useRef(null)
-  const playerRef = useRef(null)
-  const [playingMusic, setPlayingMusic] = useState('')
-  const [musicInfo, setMusicInfo] = useState({
-    info:{
-      name: '',
-      singer: '',
-      imgUrl: '',
-      id: ''
-    }
-  })
-  const [musicDuration, setMusicDuration] = useState(0)
-  // 音乐播放列表
-  const [playList, setPlayList] = useState({
+  // 播放器
+
+  // state
+  const [playInfo, setPlayinfo] = useState({
+    curIndex: -1,
     list: []
   })
-
-
-  //  点击播放按钮
-  const handlePlayingClick = ()=>{
-    const state = !isPlaying
-    if(state){
-      playerRef.current.pause()
-    }
-    else {
-      playerRef.current.play()
-    }
-    setIsPlaying(state)
-  }
-
-  //  点击playerMini播放按钮以外的地方
-  const handlePlayerClick = ()=>{
-    playerPageRef.current.style.top = '0'
-  }
-  // player 返回
-  const handlePlayerClose = ()=>{
-    playerPageRef.current.style.top = '100%'
-  }
-
+  const [playState, setPlayState] = useState(false)
+  const audioRef = useRef(null)
   // 加载音乐
-  const loadMusic = (music)=>{
-    const { musicUrl, name, singer, imgUrl, id } = music
-    setPlayingMusic(musicUrl)
-    setMusicInfo({
-      info: {
-        name,
-        singer,
-        imgUrl,
-        id,
-        musicUrl
-      }
+  function loadMusic(list, index){
+    console.log(list, index);
+    setPlayinfo({
+      curIndex:index,
+      list:list
     })
-    setIsPlaying(false)
+    play()
+  }
+  // 当前播放音乐
+  function curPlayMusic(playInfo){
+    return {
+      ...playInfo.list[playInfo.curIndex]
+    }
+  }
+  
+
+  // 控制
+  function play(){
+    setPlayState(true)
     setTimeout(()=>{
-      const audioEle = playerRef.current
-      audioEle.play()
-
-      // 音乐持续时间
-      let audio = document.createElement('audio') //生成一个audio元素 
-      audio.src = musicUrl //音乐的路径 
-      audio.addEventListener("canplay", function() {
-        setMusicDuration(parseInt(audio.duration))
-      });
-      
-      
-    }, 0)
-
-  }
-
-  useEffect(()=>{
-    // 先移除事件再添加事件
-    // 播放停止之后做的事情
-    function listener(){
-      console.log('播放结束');
-      if(playList.list.length !== 0){
-        // 播放下一首
-        const curMusicId = musicInfo.info.id
-        console.log('当前播放id', curMusicId);
-        // 
-        let index = playList.list.findIndex(item=>item.id === curMusicId)
-        const length = playList.list.length
-        console.log(index, length - 1);
-        if(index < length - 1){// 不是最后一首的时候
-          index++
-          const musicInfo={
-            name: playList.list[index].name,
-            singer: playList.list[index].singer,
-            imgUrl: playList.list[index].imgUrl,
-            id: playList.list[index].id,
-            musicUrl: playList.list[index].musicUrl
-          }
-          loadMusic(musicInfo)
-        }
-        else{
-          // 最后一首的时候
-          console.log('最后一首');
-          handlePlayingClick()
-          // playerRef.current.pause()
-        }
-      }
-      console.log('playList', playList);
-    }
-    // 移除
-    playerRef.current.removeEventListener('ended', listener)
-    
-    // 添加事件
-    playerRef.current.addEventListener('ended', listener)
-
-  }, [playList])
-
-  // 下一首上一首
-  const switchMusic = (options)=>{
-    console.log(options);
-    const curMusicId = musicInfo.info.id
-    console.log(playList);
-
-    // 找到当前音乐的下标
-    if(playList.list){
-      let index = playList.list.findIndex(item => item.id === curMusicId)
-      const length = playList.list.length
-      if(options === 'pre'){
-        index = index - 1
-      }
-      else {
-        index = index + 1
-      }
-      if(index >= 0 && index < length){
-        const music = playList.list[index]
-        loadMusic(music)
-      }
-    }
-
-
-  }
-
-
-
-  // 加载播放列表
-  function loadPlayList(list){
-    console.log('playList', list);
-    setPlayList({
-      list: list
+      audioRef.current.play()
     })
   }
+  function pause(){
+    setPlayState(false)
+    setTimeout(()=>{
+      audioRef.current.pause()
+    })
+  }
+  function next(){
+    const copyInfo = JSON.parse(JSON.stringify(playInfo))
+    const length = copyInfo.list.length
+    if(length===0){
+      message.error('请选择音乐文件')
+      return
+    }
+    const curIndex = copyInfo.curIndex
+    if(curIndex < 0 && curIndex >= length){
+      message.error('音乐索引非法')
+      return
+    }
+    if(curIndex === length - 1){
+      message.warning('已经是最后一首')
+      return
+    }
+    // 下一首
+    copyInfo.curIndex++
+    setPlayinfo(copyInfo)
+    play()
+  }
+  function pre(){
+    console.log('上一首');
+    const copyInfo = JSON.parse(JSON.stringify(playInfo))
+    const length = copyInfo.list.length
+    if(length===0){
+      message.error('请选择音乐文件')
+      return
+    }
+    const curIndex = copyInfo.curIndex
+    if(curIndex < 0 && curIndex >= length){
+      message.error('音乐索引非法')
+      return
+    }
+    if(curIndex === 0){
+      message.warning('当前音乐就是第一首')
+      return
+    }
+    // 下一首
+    copyInfo.curIndex--
+    setPlayinfo(copyInfo)
+    play()
+  }
+  
+  // 真实dom渲染之后
+  useEffect(()=>{
+    audioRef.current.oncanplay = ()=>{
+      console.log('可以播放');
+    }
+  }, [])
 
-  const [showOptions, setShowOptions] = useState(true)
+  // 数据改变之后
+  useEffect(()=>{
+    console.log(playInfo);
+  }, [playInfo])
+
+
+  // 展示player
+  const playerRef = useRef(null)
+  function showPlayer(){
+    playerRef.current.style.top = '0'
+  }
+  function closePlayer(){
+    playerRef.current.style.top = '100%'
+  }
 
   return (
     <div className={classes.box}>
@@ -241,19 +200,19 @@ function App(props) {
         <div>
           <Routes>
             <Route path="/" element={<Outlet />}>
-              <Route index element={<Home loadMusic={loadMusic} loadPlayList={loadPlayList}></Home>}/>
+              <Route index element={<Home loadMusic={loadMusic}></Home>}/>
               <Route path="moment" element={<Outlet />}>
                 <Route index element={<Moment />}></Route>
                 <Route path="add" element={<AddMoment />}></Route>
                 <Route path="detail" element={<MomentDetail />}></Route>
               </Route>
-              <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
+              <Route path="album/:id" element={<Album />} />
               <Route path="chat" element={<Outlet />} >
                 <Route index element={<Chat messagePool={messagePool} />}></Route>
                 <Route path='dialog/:dialogId' element={<ChatDialog socket={socket} messagePool={messagePool}/>}></Route>
               </Route>
               <Route path="me" element={<Me />} />
-              <Route path="search" element={<Search loadMusic={loadMusic} />} />
+              <Route path="search" element={<Search />} />
             </Route>
             <Route />
             <Route path='/test' element={<Test></Test>}></Route>
@@ -265,11 +224,12 @@ function App(props) {
           </Routes>
         </div>
       </div>
-      <div className={'playerMini'}>
-        <PlayerMini 
-          isPlaying={isPlaying} 
-          {...musicInfo.info}
-          onPlayingClick={handlePlayingClick} onPlayerClick={handlePlayerClick}
+      <div className={'playerMini'} onClick={showPlayer}>
+        <PlayerMini
+          playState={playState}
+          play={play}
+          pause={pause} 
+          {...curPlayMusic(playInfo)}
         ></PlayerMini>
       </div>
       <div className={classes.footer}>
@@ -278,20 +238,24 @@ function App(props) {
       <div className={classes.audio}>
         <audio
           id='audio'
-          ref={playerRef}
-          src={playingMusic}
+          src={(playInfo.list.length > 0 && playInfo.curIndex >= 0 && playInfo.curIndex < playInfo.list.  length) ? 
+            playInfo.list[playInfo.curIndex].musicUrl : ''
+          }
+          ref={audioRef}
         >
         </audio>
       </div>
-      <div className={classes.player} ref={playerPageRef}>
-        <Player onPlayerClose={handlePlayerClose} 
-          playState={isPlaying} onPlayStateChange={handlePlayingClick}
-          songName={musicInfo.info.name}
-          imgUrl={musicInfo.info.imgUrl}
-          singer={musicInfo.info.singer}
-          duration = {musicDuration}
-          pre={()=>{switchMusic('pre')}}
-          next={()=>{switchMusic('next')}}
+      <div className={classes.player} 
+          ref={playerRef}
+      >
+        <Player 
+          pre={pre}
+          next={next}
+          play={play}
+          pause={pause}
+          playState={playState}
+          closePlayer={closePlayer}
+          {...curPlayMusic(playInfo)}
         ></Player>
       </div>
     </div>

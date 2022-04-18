@@ -8,45 +8,23 @@ import { baseUrl } from '../../../global.conf.js'
 import { MusicItem } from '../../common/musicItem'
 
 export function Range(props){
-  const { loadMusic, loadPlayList } = props
+  const { loadMusic } = props
   const [data, setData] = useState({
-    list: [
-      {
-        title: 'Ant Design Title 1',
-      },
-      {
-        title: 'Ant Design Title 2',
-      },
-      {
-        title: 'Ant Design Title 3',
-      },
-      {
-        title: 'Ant Design Title 4',
-      },
-      {
-        title: 'Ant Design Title 4',
-      },
-    ]
+    list: []
   })
-
+  // 获取排行榜音乐
   useEffect(()=>{
     let cancel = false
     let timer = null;
 
     getRange()
-    .then((data)=>{
+    .then((res)=>{
       if(cancel) return
-      const musicList = data.musicList
-      const promises = musicList.map(item=>{
-        return getMusicById(item)
-      })
-      return Promise.all(promises)
-    })
-    .then((resList)=>{
-      if(cancel) return
+      if(res.code !== 200){
+        console.error(res.error);
+      }
       // 解包
-      resList = resList.map(item=>{
-        item = item.data
+      const resList = res.data.map(item=>{
         item.imgUrl = baseUrl + item.imgUrl
         item.musicUrl = baseUrl + item.musicUrl
         return item
@@ -64,27 +42,25 @@ export function Range(props){
     }
   }, [])
 
-  // 处理排行榜的点击
-  function handleRangeClick(){
-    console.log('click range');
-    // 加载当前播放列表
-    const copyData = JSON.parse(JSON.stringify(data))
-    loadPlayList(copyData.list)
-  }
-
   return (
-    <div className={classes.range} onClick={handleRangeClick}>
+    <div className={classes.range}>
       <h2>排行榜</h2>
-      <List
-        itemLayout="horizontal"
-        dataSource={data.list}
-        renderItem={(item, index) => (
-          <List.Item>
-            <span className={classes.rangeNumber}>{index + 1}</span>
-            <MusicItem {...item} loadMusic={loadMusic}></MusicItem>
-          </List.Item>
-        )}
-      />
+      <div className={classes.list}>
+        {
+          data.list.map((item, index)=>{
+            return (
+              <div className={classes.item}
+                key={item._id}
+              >
+                <span>{index + 1}</span>
+                <div>
+                  <MusicItem list={data.list} index={index} loadMusic={loadMusic}></MusicItem>
+                </div>
+              </div>
+            )
+          })
+        }
+      </div>
     </div>
   )
 }

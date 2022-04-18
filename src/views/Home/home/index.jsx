@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router';
 
 
 export function Home(props){
-  const { loadMusic, loadPlayList } = props
+  const { loadMusic } = props
   const layout = {
     style: {
       fontSize: '1.6rem',
@@ -49,7 +49,7 @@ export function Home(props){
         <Recent></Recent>
       </div>
       <div className={classes.range}>
-        <Range loadMusic={loadMusic} loadPlayList={loadPlayList}></Range>
+        <Range loadMusic={loadMusic}></Range>
       </div>
       <TokenTest></TokenTest>
     </div>

@@ -8,9 +8,20 @@ import {
 } from '@ant-design/icons'
 
 export function PlayerMini(props){
-  const {isPlaying,  onPlayingClick, onPlayerClick,
-    name, singer, imgUrl
+  const { onPlayingClick, onPlayerClick,
+    name, singer, imgUrl,
+    playState,
+    play, pause
    } = props
+   function handleClick(ev){
+    ev.stopPropagation();
+    if(playState){// 播放
+      pause()
+    }
+    else {
+      play()
+    }
+   }
   return (
     <div className={classes.player} onClick={onPlayerClick}>
       <Avatar className={classes.logo} size="large" src={imgUrl}></Avatar>
@@ -18,9 +29,9 @@ export function PlayerMini(props){
         <span>{name}</span>
         <span>-{singer}</span>
       </div>
-      <div onClick={(ev)=>{ev.stopPropagation(); onPlayingClick()}}>
+      <div onClick={handleClick}>
         {
-          isPlaying ? <PlayCircleOutlined className={classes.iconStyle}/> : <PauseCircleOutlined className={classes.iconStyle}/>
+          !playState ? <PlayCircleOutlined className={classes.iconStyle}/> : <PauseCircleOutlined className={classes.iconStyle}/>
         } 
       </div>
     </div>
