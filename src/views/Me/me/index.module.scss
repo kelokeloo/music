@@ -1,3 +1,4 @@
+@import '../../../css/global.scss';
 .box {
   padding: 1rem;
 }
@@ -31,4 +32,21 @@
 .cardTitle {
   margin: 0;
   font-weight: 700;
+}
+
+.setting {
+  margin-top: 1rem;
+  h3>span {
+    margin-left: .5rem;
+  }
+  h3{
+    padding-bottom: .5rem;
+    border-bottom: 1px solid $lineColor;
+  }
+  >main{
+    p{
+      padding: .5rem;
+      margin-bottom: 0;
+    }
+  }
 }

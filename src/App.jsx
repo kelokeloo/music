@@ -18,6 +18,8 @@ import { Forget } from './views/Login/forget'
 import { CreateAccount } from './views/Login/createAccount'
 import { ChatDialog } from './views/Chat/chatDialog'
 import { Test } from './views/test'
+import { SetPassword } from './views/Me/setPassword'
+import { SetHeadIcon } from './views/Me/setHeadIcon';
 
 // footerNav
 import { Nav } from './components/nav'
@@ -223,7 +225,12 @@ function App(props) {
                 <Route index element={<Chat messagePool={messagePool} />}></Route>
                 <Route path='dialog/:dialogId' element={<ChatDialog socket={socket} messagePool={messagePool}/>}></Route>
               </Route>
-              <Route path="me" element={<Me />} />
+              <Route path="me" element={<Outlet />} >
+                <Route index element={<Me />}></Route>
+                <Route path='setPassword' element={<SetPassword />}></Route>
+                <Route path='setHeadIcon' element={<SetHeadIcon />}></Route>
+              </Route>
+
               <Route path="search" element={<Search />} />
             </Route>
             <Route />

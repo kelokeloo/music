@@ -1,12 +1,13 @@
 import classes from './index.module.scss'
 
 import { Avatar, Card  } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined,SettingOutlined } from '@ant-design/icons';
 
 import { useEffect, useState } from 'react'
 
 import { TokenTest } from '../../../components/common/tokenTest'
 import { getUserInfo } from '../../../Api/common/load'
+import { useNavigate } from 'react-router-dom';
 
 export function Me(){
   const userId = window.sessionStorage.getItem('userid')
@@ -33,7 +34,7 @@ export function Me(){
     })
   }, [])
 
-
+  const navigateTo = useNavigate()
 
   return (
     <div className={classes.box}>
@@ -52,6 +53,16 @@ export function Me(){
           <p>Card content</p>
           <p>Card content</p>
         </Card>
+      </div>
+      <div className={classes.setting}>
+        <h3>
+          <SettingOutlined />
+          <span>设置</span>
+        </h3>
+        <main>
+          <p onClick={()=>navigateTo('/me/setPassword')}>修改账号密码</p>
+          <p onClick={()=>navigateTo('/me/setHeadIcon')}>修改头像</p>
+        </main>
       </div>
       <TokenTest></TokenTest>
     </div>

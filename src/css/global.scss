@@ -11,6 +11,9 @@
   height: 100%;
 }
 
+
+
+
 // antIconSize 
 $IconSize: 1.6rem;
 
@@ -28,3 +31,10 @@ $shadow: #eee;
 // lineColor 
 $lineColor: #aaa; 
 
+
+@mixin iconStyle {
+  font-size: $IconSize;
+  svg {
+    color: $themeColor;
+  }
+}

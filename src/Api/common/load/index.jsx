@@ -228,6 +228,9 @@ export function getDialogData(dialogId){
   })
 }
 
+/**
+ * 注册
+ */
 export function register(form){
   return http.post('/api/register', form)
   .catch(e=>{
@@ -242,6 +245,17 @@ export function setUserLikeMusic(musicId, state){
   })
   .catch(e=>{
     // console.log(e);
+  })
+}
+
+/**
+ * 修改密码
+ */
+
+export function setPassword(password, newPassword){
+  return http.post('/api/setPassword', {
+    password,
+    newPassword
   })
 }
 
