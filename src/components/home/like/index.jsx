@@ -42,6 +42,7 @@ export function Like(props){
       res.data.forEach(item=>{
         item.imgUrl = baseUrl + item.imgUrl
       })
+      console.log(res);
       setData({list: res.data})
     })
     return ()=>{
@@ -70,7 +71,10 @@ export function Like(props){
           let imgUrl = baseUrl + data.imgUrl
           data.musicUrl = musicUrl
           data.imgUrl = imgUrl
-          loadMusic(data)
+          // 封装成一个list
+          const list = [data]
+          console.log('musicItem', data);
+          loadMusic(list, 0)
           break;
         case 'album': // 跳转到指定歌单
           // 标记歌单

@@ -228,7 +228,22 @@ export function getDialogData(dialogId){
   })
 }
 
+export function register(form){
+  return http.post('/api/register', form)
+  .catch(e=>{
+    console.log(e);
+  })
+}
 
+export function setUserLikeMusic(musicId, state){
+  return http.post('/api/musicLike', {
+    musicId, 
+    state
+  })
+  .catch(e=>{
+    // console.log(e);
+  })
+}
 
 
 

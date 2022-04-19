@@ -53,16 +53,6 @@ export function Me(){
           <p>Card content</p>
         </Card>
       </div>
-      <div className={classes.likeAlbum}>
-      <Card title={<Title label="喜欢的专辑"></Title>}>
-          <p>Card content</p>
-          <p>Card content</p>
-          <p>Card content</p>
-        </Card>
-      </div>
-      <div className={classes.moment}>
-        动态
-      </div>
       <TokenTest></TokenTest>
     </div>
   )

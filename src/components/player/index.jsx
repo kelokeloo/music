@@ -13,24 +13,21 @@ import 'rc-slider/assets/index.css';
 
 import { Play } from '../../components/common/play'
 
+
 export function Player(props){
-  const {  
-    duration, 
+  const {
+    // 当前播放的音乐 
+    duration,
+    like,
     imgUrl, name, singer,
+    curPlayIndex,
+    handleLike,
     playState, 
     play, pause, pre, next,
     closePlayer
   } = props
 
 
-  const [likeActive, setLikeActive] = useState(true)
-
-
-
-  const handleLikeClick = ()=>{
-    const state = !likeActive
-    setLikeActive(state)
-  }
 
   // slider value
   const [time, setTime] = useState({
@@ -99,8 +96,8 @@ export function Player(props){
           </div>
         </div>
         <div className={classes.control}>
-          <div className={classes.like} onClick={handleLikeClick}>
-            <div className={likeActive ? classes.likeActive : classes.likeDeactive}>
+          <div className={classes.like} onClick={()=>handleLike(curPlayIndex, !like)}>
+            <div className={like ? classes.likeActive : classes.likeDeactive}>
               <svg className={classes.icon} aria-hidden="true">
                 <use xlinkHref={"#icon-likefill"}></use>
               </svg>
@@ -113,19 +110,6 @@ export function Player(props){
           </div>
           <div>
             {/* 时间模块 */}
-            {/* <Slider
-              className={classes.slider}
-              onChange={handleSliderClick}
-              min={0}
-              max={100}
-              value={time.value}
-              step={1}
-              {...sliderLayout}
-            ></Slider>
-            <div className={classes.time}>
-              <span>{time.value}</span>
-              <span>{duration}</span>
-            </div> */}
           </div>
           <div className={classes.ctrl}>
             <BackwardOutlined className={classes.ctrlIconStyle} onClick={pre}/>

@@ -35,6 +35,7 @@ import { getRange } from './Api/home';
 import { baseUrl } from './global.conf';
 
 import { message } from 'antd';
+import { setUserLikeMusic } from './Api/common/load'
 
 
 
@@ -109,12 +110,12 @@ function App(props) {
   }
   // 当前播放音乐
   function curPlayMusic(playInfo){
+    console.log('playInfo.list',playInfo.curIndex, playInfo.list);
     return {
       ...playInfo.list[playInfo.curIndex]
     }
   }
   
-
   // 控制
   function play(){
     setPlayState(true)
@@ -171,6 +172,17 @@ function App(props) {
     setPlayinfo(copyInfo)
     play()
   }
+  function handleLike(index, state){ // 设置播放列表的第index个为喜欢或者不喜欢
+    const musicId = playInfo.list[index]._id
+    // console.log(musicId, state);
+    setUserLikeMusic(musicId, state)
+    // 更新本地状态
+    const copyPlayInfo = JSON.parse(JSON.stringify(playInfo))
+
+    copyPlayInfo.list[index].like = state
+    setPlayinfo(copyPlayInfo)
+
+  }
   
   // 真实dom渲染之后
   useEffect(()=>{
@@ -224,6 +236,16 @@ function App(props) {
           </Routes>
         </div>
       </div>
+      <div className={classes.audio}>
+        <audio
+          id='audio'
+          src={(playInfo.list.length > 0 && playInfo.curIndex >= 0 && playInfo.curIndex < playInfo.list.  length) ? 
+            playInfo.list[playInfo.curIndex].musicUrl : ''
+          }
+          ref={audioRef}
+        >
+        </audio>
+      </div>
       <div className={'playerMini'} onClick={showPlayer}>
         <PlayerMini
           playState={playState}
@@ -235,16 +257,6 @@ function App(props) {
       <div className={classes.footer}>
         <Nav actived={actived} onClick={handleNavClick}></Nav>
       </div>
-      <div className={classes.audio}>
-        <audio
-          id='audio'
-          src={(playInfo.list.length > 0 && playInfo.curIndex >= 0 && playInfo.curIndex < playInfo.list.  length) ? 
-            playInfo.list[playInfo.curIndex].musicUrl : ''
-          }
-          ref={audioRef}
-        >
-        </audio>
-      </div>
       <div className={classes.player} 
           ref={playerRef}
       >
@@ -255,6 +267,8 @@ function App(props) {
           pause={pause}
           playState={playState}
           closePlayer={closePlayer}
+          handleLike={handleLike}
+          curPlayIndex={playInfo.curIndex}
           {...curPlayMusic(playInfo)}
         ></Player>
       </div>

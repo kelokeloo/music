@@ -3,24 +3,35 @@ import classes from './index.module.scss'
 import { Form, Input, Button, Checkbox } from 'antd';
 
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { register } from '../../../Api/common/load'
 
 
-const onFinish = (values) => {
-  console.log('Success:', values);
-};
 
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
 
 export function CreateAccount(props){
+  const onFinish = (values) => {
+    console.log('Success:', values);
+    register(values)
+    .then(data=>{
+      console.log(data);
+    })
+  };
+  
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
+
+
+
   return (
     <div className={classes.box}>
       <div className={classes.form}>
       <Form
         name="loginForm"
         initialValues={{
-          remember: true,
+          
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
