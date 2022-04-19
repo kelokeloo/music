@@ -259,6 +259,16 @@ export function setPassword(password, newPassword){
   })
 }
 
+/**
+ * 修改头像
+ */
+ export function setHeadIcon(headIcon){
+  return http.post('/api/setHeadIcon', {
+    headIcon
+  })
+}
+
+
 
 
 
