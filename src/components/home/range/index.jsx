@@ -32,7 +32,6 @@ export function Range(props){
       setData({
         list: resList
       })
-      console.log('rangeData', resList);
     }) 
     .catch(e=>{
       console.error(e)

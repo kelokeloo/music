@@ -33,9 +33,17 @@ export function Chat(props){
         let time = ''
         let content = ''
         if(length !== 0){
-          const lastMessage = messages[length-1]
-          time = moment(lastMessage.time).fromNow();  
-          content = lastMessage.text
+          const lastInfo = messages[length-1]
+          const { content: contentRaw, timeStamp } = lastInfo
+          time = moment(timeStamp).fromNow();   
+          switch (contentRaw.type) {
+            case 'text':
+              content = contentRaw.value
+              break;
+          
+            default:
+              break;
+          }
         }
 
         // 获取头像和姓名
@@ -81,7 +89,7 @@ export function Chat(props){
             return (
               <div key={item._id} className={classes.msgBox}>
                 <ChatItem {...item}></ChatItem>
-                {item.hasNewMsg ? <div className={classes.notify}></div>:<div>无</div>}
+                {item.hasNewMsg ? <div className={classes.notify}></div>:<div></div>}
               </div>
             )
           })
