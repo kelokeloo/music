@@ -38,6 +38,7 @@ export function Me(props){
   const navigateTo = useNavigate()
   function logout(){
     setLogin(false)
+    window.sessionStorage.clear()
     navigateTo('/login')
   }
 

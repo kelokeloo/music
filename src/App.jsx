@@ -250,10 +250,10 @@ function App(props) {
     // 发送id绑定
     ws.onopen = ()=>{
       console.log('socket已经连接创建');
-      ws.send({
+      ws.send(JSON.stringify({
         type: 'connect',
         value: window.sessionStorage.getItem('userid')
-      })
+      }))
     }
     ws.onmessage = (data)=>{
       console.log('收到:', data);  
@@ -269,7 +269,6 @@ function App(props) {
       createSocket()
     }
     else {
-      window.sessionStorage.clear()
       // 断开socket连接
       if(socket.ws){
         socket.ws.close()
