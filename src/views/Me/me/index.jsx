@@ -1,6 +1,6 @@
 import classes from './index.module.scss'
 
-import { Avatar, Card  } from 'antd';
+import { Avatar, Card, Button  } from 'antd';
 import { UserOutlined,SettingOutlined } from '@ant-design/icons';
 
 import { useEffect, useState } from 'react'
@@ -9,7 +9,8 @@ import { TokenTest } from '../../../components/common/tokenTest'
 import { getUserInfo } from '../../../Api/common/load'
 import { useNavigate } from 'react-router-dom';
 
-export function Me(){
+export function Me(props){
+  const { setLogin } = props
   const userId = window.sessionStorage.getItem('userid')
   const name = window.sessionStorage.getItem('username')
   const headIcon = window.sessionStorage.getItem('headIcon')
@@ -35,6 +36,10 @@ export function Me(){
   }, [])
 
   const navigateTo = useNavigate()
+  function logout(){
+    setLogin(false)
+    navigateTo('/login')
+  }
 
   return (
     <div className={classes.box}>
@@ -63,6 +68,9 @@ export function Me(){
           <p onClick={()=>navigateTo('/me/setPassword')}>修改账号密码</p>
           <p onClick={()=>navigateTo('/me/setHeadIcon')}>修改头像</p>
         </main>
+      </div>
+      <div>
+        <Button onClick={logout}>注销</Button>
       </div>
       <TokenTest></TokenTest>
     </div>

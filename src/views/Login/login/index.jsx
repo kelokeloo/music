@@ -12,48 +12,48 @@ import { baseUrl } from '../../../global.conf';
 
 
 
-const onFinish = async (values, callback, socket) => {
-  // 发起登录请求
-  const data = await login({...values})
-  console.log(data);
-  // 登录成功
-  if(data.code === 200){
-    message.success('登录成功')
-    console.log('user login info', data.data);
-    // 保存token
-    const token = data.data.token
-    window.sessionStorage.setItem('token', token)
-    // 保存用户信息
-    window.sessionStorage.setItem('userid', data.data.userID)
-    window.sessionStorage.setItem('headIcon', baseUrl + data.data.headIcon)
-    window.sessionStorage.setItem('username', data.data.username)
 
-    // 登录成功之后向服务器发送用户id，id绑定到具体的socket
-    const wsConfig = {
-      type: 'connect',
-      userId: window.sessionStorage.getItem('userid')
-    }
-    socket.send(JSON.stringify(wsConfig))
-
-    // 跳转到首页
-    callback('/')
-    return true
-  }
-  else {
-    message.error('登录失败,请检查账号密码')
-    return false
-  }
-
-
-};
-
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
 
 export function Login(props){
-  const { socket } = props
+  const { setLogin } = props
   const navigateTo = useNavigate()
+
+  const onFinish = async (values, callback) => {
+    // 发起登录请求
+    const data = await login({...values})
+    console.log(data);
+    // 登录成功
+    if(data.code === 200){
+      message.success('登录成功')
+      console.log('user login info', data.data);
+      // 保存token
+      const token = data.data.token
+      window.sessionStorage.setItem('token', token)
+      // 保存用户信息
+      window.sessionStorage.setItem('userid', data.data.userID)
+      window.sessionStorage.setItem('headIcon', baseUrl + data.data.headIcon)
+      window.sessionStorage.setItem('username', data.data.username)
+  
+      // 登录成功之后创建socket连接
+      // createSocket()
+      setLogin(true)
+      // 跳转到首页
+      callback('/')
+      return true
+    }
+    else {
+      message.error('登录失败,请检查账号密码')
+      return false
+    }
+  
+  
+  };
+  
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
+
   return (
     <div className={classes.box}>
       <div className={classes.form}>
@@ -62,7 +62,7 @@ export function Login(props){
         initialValues={{
           remember: true,
         }}
-        onFinish={(values)=>{onFinish(values, navigateTo, socket)}}
+        onFinish={(values)=>{onFinish(values, navigateTo)}}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >

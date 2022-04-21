@@ -25,7 +25,6 @@ export function Chat(props){
   useEffect(()=>{
     getChatList()
     .then(({chatList:chatListRaw})=>{
-      console.log('chatListRaw', chatListRaw);
       // 获取对话框相关数据
       let chatRelateInfo = chatListRaw.map((item)=>{
         const {include, messages, _id} = item
@@ -63,44 +62,12 @@ export function Chat(props){
     })
     .then(list=>{
       // 拿到并处理好相关数据,设置状态
-      console.log('list', list);
       setChatList({
         list: list
       })
     })
   }, [])
 
-  useEffect(()=>{
-    const time = setInterval(()=>{
-      console.log('messagePool', messagePool);
-
-      let copyChatList = JSON.parse(JSON.stringify(chatList))
-      // 添加新信息
-      copyChatList.list = copyChatList.list.map(item=>{
-        const dialogId = item._id
-        const index = messagePool.pool.findIndex(item=>item.dialogId === dialogId)
-        item.hasNewMsg = false
-        if(index >= 0){
-          const lastIndex = messagePool.pool[index].msgs.length - 1
-          const newMsg = messagePool.pool[index].msgs[lastIndex]
-          item.content = newMsg.text
-          item.time = newMsg.time
-          item.hasNewMsg = true
-          console.log(`${dialogId}有新消息`);
-        }
-        
-        return item
-      })
-
-      setChatList(copyChatList)
-
-      
-
-    }, 2000)  
-    return ()=>{
-      clearInterval(time)
-    }
-  })
 
   
   return (

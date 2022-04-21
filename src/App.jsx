@@ -45,7 +45,7 @@ import { setUserLikeMusic } from './Api/common/load'
 
 
 function App(props) { 
-  const { socket, messagePool } = props
+  
 
   // 页面刷新的时候处理导航
   const location = useLocation();
@@ -112,7 +112,6 @@ function App(props) {
   }
   // 当前播放音乐
   function curPlayMusic(playInfo){
-    console.log('playInfo.list',playInfo.curIndex, playInfo.list);
     return {
       ...playInfo.list[playInfo.curIndex]
     }
@@ -195,7 +194,7 @@ function App(props) {
 
   // 数据改变之后
   useEffect(()=>{
-    console.log(playInfo);
+    // console.log(playInfo);
   }, [playInfo])
 
 
@@ -207,6 +206,80 @@ function App(props) {
   function closePlayer(){
     playerRef.current.style.top = '100%'
   }
+
+
+
+
+  // 对话框未读消息
+  const [unReadMsgData, setUnReadMsgData] = useState({
+    list: []
+  })
+  const [loginState, setLoginState] = useState(false)
+  function setLogin(state){
+    setLoginState(state)
+  }
+
+  useEffect(()=>{
+    // 加载的时候, 判断是否登录
+    const loginId = window.sessionStorage.getItem('userid')
+    if(loginId){
+      setLoginState(true) 
+    }
+    else {
+      setLoginState(false)
+    }
+    // 首次加载的时候，获取未读数据
+    
+  }, [])
+
+  const [socket, setSocket] = useState({
+    ws: null
+  })
+
+  function createSocket(){
+    let ws = socket.ws
+    if(ws){ // 如果socket连接存在，则先关闭socket连接
+      console.log('关闭socket连接');
+      ws.close()
+      setSocket({
+        ws: null
+      })
+    }
+    // 创建连接
+    ws = new WebSocket('ws://localhost:8080');
+    // 发送id绑定
+    ws.onopen = ()=>{
+      console.log('socket已经连接创建');
+      ws.send({
+        type: 'connect',
+        value: window.sessionStorage.getItem('userid')
+      })
+    }
+    ws.onmessage = (data)=>{
+      console.log('收到:', data);  
+    }
+    setSocket({
+      ws
+    })
+  }
+  // 如果登录了,  建立socket连接
+  useEffect(()=>{
+    console.log(`${loginState ? '登录了': '注销了'}`);
+    if(loginState === true){
+      createSocket()
+    }
+    else {
+      window.sessionStorage.clear()
+      // 断开socket连接
+      if(socket.ws){
+        socket.ws.close()
+        setSocket({
+          ws: null
+        })
+      }
+    }
+  }, [loginState])
+
 
   return (
     <div className={classes.box}>
@@ -222,11 +295,11 @@ function App(props) {
               </Route>
               <Route path="album/:id" element={<Album />} />
               <Route path="chat" element={<Outlet />} >
-                <Route index element={<Chat messagePool={messagePool} />}></Route>
-                <Route path='dialog/:dialogId' element={<ChatDialog socket={socket} messagePool={messagePool}/>}></Route>
+                <Route index element={<Chat/>}></Route>
+                <Route path='dialog/:dialogId' element={<ChatDialog/>}></Route>
               </Route>
               <Route path="me" element={<Outlet />} >
-                <Route index element={<Me />}></Route>
+                <Route index element={<Me setLogin={setLogin}/>}></Route>
                 <Route path='setPassword' element={<SetPassword />}></Route>
                 <Route path='setHeadIcon' element={<SetHeadIcon />}></Route>
               </Route>
@@ -236,7 +309,7 @@ function App(props) {
             <Route />
             <Route path='/test' element={<Test></Test>}></Route>
             <Route path='/login' element={<Outlet></Outlet>}>
-              <Route index element={<Login socket={socket}></Login>}></Route>
+              <Route index element={<Login setLogin={setLogin}></Login>}></Route>
               <Route path='forget' element={<Forget></Forget>}></Route>
               <Route path='create' element={<CreateAccount></CreateAccount>}></Route>
             </Route>

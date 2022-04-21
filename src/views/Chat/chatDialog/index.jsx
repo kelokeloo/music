@@ -81,36 +81,36 @@ export function ChatDialog(props){
   }
 
   // 消费对话框数据
-  useEffect(()=>{
-    let time = setInterval(()=>{
-      //向服务器发起请求，并清空消息池
-      const index = messagePool.pool.findIndex(item=>item.dialogId === dialogId)
+  // useEffect(()=>{
+  //   let time = setInterval(()=>{
+  //     //向服务器发起请求，并清空消息池
+  //     const index = messagePool.pool.findIndex(item=>item.dialogId === dialogId)
       
-      if(index === -1) return
-      const msgs = messagePool.pool[index].msgs
-      console.log('msgs', msgs);
-      console.log('msgList.list', msgList.list);
+  //     if(index === -1) return
+  //     const msgs = messagePool.pool[index].msgs
+  //     console.log('msgs', msgs);
+  //     console.log('msgList.list', msgList.list);
 
-      // 添加对话数据
-      const copyMsgList = JSON.parse(JSON.stringify(msgList))
+  //     // 添加对话数据
+  //     const copyMsgList = JSON.parse(JSON.stringify(msgList))
       
-      copyMsgList.list = [...copyMsgList.list, ...msgs]
+  //     copyMsgList.list = [...copyMsgList.list, ...msgs]
       
-      setMsgList(copyMsgList)
+  //     setMsgList(copyMsgList)
 
-      // 清空消息池
-      messagePool.pool.splice(index, 1)
-      // 滚动
-      scrollToBottom()
+  //     // 清空消息池
+  //     messagePool.pool.splice(index, 1)
+  //     // 滚动
+  //     scrollToBottom()
       
 
-    }, 500)
+  //   }, 500)
     
     
-    return ()=>{
-      clearInterval(time)
-    }
-  })
+  //   return ()=>{
+  //     clearInterval(time)
+  //   }
+  // })
 
   const mainContainerRef = useRef(null)
 
