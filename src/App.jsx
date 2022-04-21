@@ -255,8 +255,16 @@ function App(props) {
         value: window.sessionStorage.getItem('userid')
       }))
     }
-    ws.onmessage = (data)=>{
-      console.log('收到:', data);  
+    ws.onmessage = ({data})=>{
+      const info = JSON.parse(data)
+      switch (info.type) {
+        case 'connect':
+          console.log('[log]', info.value);
+          break;
+      
+        default:
+          break;
+      }
     }
     setSocket({
       ws
