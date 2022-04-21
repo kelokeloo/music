@@ -286,6 +286,16 @@ export function getDialogReadMsg(dialogId){
   })
 }
 
+/**
+ * 设置信息已读
+ */
+
+export function setUserReadMsg(dialogId){
+  return http.post('/api/setUserReadMsg', {
+    dialogId
+  })
+}
+
 
 
 

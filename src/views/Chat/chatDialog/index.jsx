@@ -8,14 +8,14 @@ import classes from './index.module.scss'
 import { Input,  Button } from 'antd';
 const { TextArea } = Input;
 import { useState, useEffect, useRef } from 'react';
-import { getDialogData, getDialogReadMsg, login } from '../../../api/common/load'
+import { getDialogData, getDialogReadMsg, login, setUserReadMsg } from '../../../api/common/load'
 import { MsgBox } from '../../../components/chat/msgBox'
 import { baseUrl } from '../../../global.conf'
 import moment from 'moment';
 
 
 export function ChatDialog(props){
-  const { socket, unReadMsgData, consumeUnReadMsgData } = props
+  const { socket, unReadMsgData, setUnReadMsgData } = props
   const { ws } = socket
   const navigateTo = useNavigate()
   function goback(){
@@ -41,13 +41,29 @@ export function ChatDialog(props){
   useEffect(()=>{
     getDialogReadMsg(dialogId)
     .then(res=>{
+      console.log('resRaw', res);
       res.map(item=>{
         return item.headIcon = baseUrl + item.headIcon
       })
-      setMsgList({
-        list: res
+      
+      setMsgList((msgList)=>{
+        // 如果res中已经有msgList.list里面的内容了 unique操作
+        msgList.list.forEach(msgListItem=>{
+          if(res.findIndex(resItem=>resItem.timeStamp === msgListItem.timeStamp) === -1){ // 不在则添加进去
+            res.push(msgListItem)
+          }
+        })
+        //   console.log('对话框已读消息', res);
+        // 滚动
+        const scrollTime = setTimeout(()=>{
+          scrollToBottom()
+          clearTimeout(scrollTime)
+        })
+        return {
+          list: res
+        }
       })
-      console.log('对话框已读消息', res);
+      
     })
   }, [])
   
@@ -139,14 +155,24 @@ export function ChatDialog(props){
         }
       })
       console.log('[对话框-已读-消息]', unReadlist);
+      // 清空unReadlist
+      setUnReadMsgData((unReadMsgData)=>{
+        const targetIndex = unReadMsgData.list.findIndex(item=>item.dialogId === dialogId)
+        unReadMsgData.list.splice(targetIndex, 1)
+        return JSON.parse(JSON.stringify(unReadMsgData))
+      })
+
       // let { list } = 
       return {
         list: [...msgList.list, ...unReadlist]
       }
     })
 
-    // 同步到数据库
-    
+    // 同步到数据库 dialogId 、userId
+    setUserReadMsg(dialogId)
+    .then(data=>{
+      console.log('change', data);
+    })
 
     // 滚动
     const scrollTime = setTimeout(()=>{
