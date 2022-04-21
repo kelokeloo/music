@@ -268,6 +268,24 @@ export function setPassword(password, newPassword){
   })
 }
 
+/**
+ * 获取用户所有未读数据
+ */
+export function getAllDialogUnreadMsg(){
+  return http.get('/api/AllDialogUnreadMsg')
+}
+
+/**
+ * 获取指定对话框已读数据
+ */
+export function getDialogReadMsg(dialogId){
+  return http.get('/api/dialogReadMsg', {
+    params: {
+      dialogId
+    }
+  })
+}
+
 
 
 

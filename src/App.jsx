@@ -37,7 +37,7 @@ import { getRange } from './Api/home';
 import { baseUrl } from './global.conf';
 
 import { message } from 'antd';
-import { setUserLikeMusic } from './Api/common/load'
+import { setUserLikeMusic, getAllDialogUnreadMsg } from './Api/common/load'
 
 
 
@@ -211,9 +211,19 @@ function App(props) {
 
 
   // 对话框未读消息
+
+
   const [unReadMsgData, setUnReadMsgData] = useState({
     list: []
   })
+  function consumeUnReadMsgData(dialogId){
+    setUnReadMsgData((unReadMsgData)=>{
+      const targetIndex = unReadMsgData.list.findIndex(item=>item.dialogId === dialogId)
+      unReadMsgData.list.splice(targetIndex, 1)
+      return JSON.parse(JSON.stringify(unReadMsgData))
+    })
+  }
+
   const [loginState, setLoginState] = useState(false)
   function setLogin(state){
     setLoginState(state)
@@ -229,8 +239,18 @@ function App(props) {
       setLoginState(false)
     }
     // 首次加载的时候，获取未读数据
-    
+    getAllDialogUnreadMsg()
+    .then(data=>{
+      setUnReadMsgData({
+        list: data
+      })
+    })
+
   }, [])
+  useEffect(()=>{
+    console.log('未读消息', unReadMsgData.list);
+  }, [unReadMsgData])
+
 
   const [socket, setSocket] = useState({
     ws: null
@@ -261,7 +281,24 @@ function App(props) {
         case 'connect':
           console.log('[log]', info.value);
           break;
-      
+        case 'message':
+          const { dialogId, msg } = info.value
+          // 将消息添加到未读消息中
+          setUnReadMsgData((unReadMsgData)=>{
+            const dialogIndex = unReadMsgData.list.findIndex(item=>item.dialogId === dialogId) 
+            if(dialogIndex === -1){ // 不存在
+              const list = unReadMsgData.list
+              list.push({
+                dialogId,
+                unReadlist: [msg]
+              })
+            }
+            else {
+              const list = unReadMsgData.list
+              list[dialogIndex].unReadlist.push(msg)
+            }
+            return JSON.parse(JSON.stringify(unReadMsgData))
+          })
         default:
           break;
       }
@@ -303,7 +340,12 @@ function App(props) {
               <Route path="album/:id" element={<Album />} />
               <Route path="chat" element={<Outlet />} >
                 <Route index element={<Chat/>}></Route>
-                <Route path='dialog/:dialogId' element={<ChatDialog/>}></Route>
+                <Route path='dialog/:dialogId' element={<ChatDialog 
+                  socket={socket}
+                  unReadMsgData={unReadMsgData}
+                  // consumeUnReadMsgData={consumeUnReadMsgData}
+                  setUnReadMsgData={setUnReadMsgData}
+                />}></Route>
               </Route>
               <Route path="me" element={<Outlet />} >
                 <Route index element={<Me setLogin={setLogin}/>}></Route>

@@ -3,9 +3,9 @@ import moment from 'moment';
 import classes from './index.module.scss'
 
 export function MsgBox(props){
-  const { belong, time,
-      type, text, musicId, 
-    username, headIcon
+  const { belong,
+      content, timeStamp, 
+      username, headIcon
   } = props
   const loginId = window.sessionStorage.getItem('userid')
   let state = loginId === belong ? 'left' : 'right'
@@ -20,10 +20,10 @@ export function MsgBox(props){
             <div>
               <div className={classes.leftTitle}>
                 <span>{username}</span>
-                <span>{moment(time).fromNow()}</span>
+                <span>{moment(timeStamp).fromNow()}</span>
               </div>
               <div className={classes.leftMain}>
-                {text}
+                {content.value}
               </div>
             </div>
           </div>
@@ -33,12 +33,12 @@ export function MsgBox(props){
             <div>
               <div className={classes.rightTitle}>
                 <span>{username}</span>
-                <span>{moment(time).fromNow()}</span>
+                <span>{moment(timeStamp).fromNow()}</span>
               </div>
               <div className={classes.rightMain}>
                 <div>
                   <span>
-                  {text}
+                  {content.value}
                   </span>
                 </div>
               </div>
