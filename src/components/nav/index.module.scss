@@ -18,6 +18,7 @@
   height: 100%;
   flex: 1;
   @include cc;
+  position: relative;
 }
 
 .activedStyle {
@@ -27,4 +28,13 @@
     color: white;
   }
 }
-
+.notify {
+  position: absolute;
+  top: .3rem;
+  right: 1.5rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: $themeColor;
+  
+}

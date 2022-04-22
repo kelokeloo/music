@@ -27,12 +27,15 @@
   position: relative;
 }
 .notify {
-  width: 10px;
-  height: 10px;
-  background-color: $themeColor;
+  width: 20px;
+  height: 20px;
+  background-color: rgb(211, 58, 44);
   position: absolute;
-  top: 0.2rem;
-  left: 2.5rem;
+  /* top: 0.2rem; */
+  /* left: 2.5rem; */
   border-radius: 50%;
-  
+  right: 0;
+  bottom: 0.8rem;
+  text-align: center;
+  color: white;
 }

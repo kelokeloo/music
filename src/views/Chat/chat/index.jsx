@@ -16,7 +16,7 @@ import { baseUrl } from '../../../global.conf'
 import moment from "moment";
 
 export function Chat(props){
-  const { messagePool } = props
+  const { messagePool, unReadMsgData } = props
   // 对话列表数据
   const [chatList, setChatList] = useState({
     list: []
@@ -89,7 +89,12 @@ export function Chat(props){
             return (
               <div key={item._id} className={classes.msgBox}>
                 <ChatItem {...item}></ChatItem>
-                {item.hasNewMsg ? <div className={classes.notify}></div>:<div></div>}
+                {
+                  unReadMsgData.list.findIndex(unReadItem=>unReadItem.dialogId == item._id) === -1 ? '' : (
+                  <span className={classes.notify}>
+                    { unReadMsgData.list[unReadMsgData.list.findIndex(unReadItem=>unReadItem.dialogId == item._id)].unReadlist.length}
+                  </span>)
+                }
               </div>
             )
           })

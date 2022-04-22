@@ -339,7 +339,7 @@ function App(props) {
               </Route>
               <Route path="album/:id" element={<Album />} />
               <Route path="chat" element={<Outlet />} >
-                <Route index element={<Chat/>}></Route>
+                <Route index element={<Chat unReadMsgData={unReadMsgData}/>}></Route>
                 <Route path='dialog/:dialogId' element={<ChatDialog 
                   socket={socket}
                   unReadMsgData={unReadMsgData}
@@ -384,7 +384,7 @@ function App(props) {
         ></PlayerMini>
       </div>
       <div className={classes.footer}>
-        <Nav actived={actived} onClick={handleNavClick}></Nav>
+        <Nav actived={actived} onClick={handleNavClick} unReadMsgData={unReadMsgData}></Nav>
       </div>
       <div className={classes.player} 
           ref={playerRef}

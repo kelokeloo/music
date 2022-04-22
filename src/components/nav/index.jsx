@@ -13,7 +13,7 @@ import { useState } from 'react'
 
 
 export function Nav(props){
-  const { actived, onClick } = props
+  const { actived, onClick, unReadMsgData } = props
 
 
   const layout = {
@@ -42,6 +42,9 @@ export function Nav(props){
               <section className={actived === index ? classes.activedStyle : ''}>
                 {item}
               </section>
+              {
+                index === 1 && unReadMsgData.list.length >= 1 ? <span className={classes.notify}></span> : ''
+              }
             </div>
             
           )
