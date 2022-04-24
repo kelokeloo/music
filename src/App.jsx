@@ -121,7 +121,9 @@ function App(props) {
   function play(){
     setPlayState(true)
     setTimeout(()=>{
-      audioRef.current.play()
+      if(audioRef.current){
+        audioRef.current.play()
+      }
     })
   }
   function pause(){
@@ -131,47 +133,56 @@ function App(props) {
     })
   }
   function next(){
-    const copyInfo = JSON.parse(JSON.stringify(playInfo))
-    const length = copyInfo.list.length
-    if(length===0){
-      message.error('请选择音乐文件')
-      return
-    }
-    const curIndex = copyInfo.curIndex
-    if(curIndex < 0 && curIndex >= length){
-      message.error('音乐索引非法')
-      return
-    }
-    if(curIndex === length - 1){
-      message.warning('已经是最后一首')
-      return
-    }
-    // 下一首
-    copyInfo.curIndex++
-    setPlayinfo(copyInfo)
-    play()
+    setPlayinfo((playInfoRaw)=>{
+      const playInfo = JSON.parse(JSON.stringify(playInfoRaw))
+      console.log('playInfo', playInfo);
+      if(playInfo.list && playInfo.list.length > 0){
+        const length = playInfo.list.length
+        const curIndex = playInfo.curIndex
+        if(curIndex < 0 && curIndex >= length){
+          message.error('音乐索引非法')
+          return playInfo
+        }
+        if(curIndex === length - 1){
+          message.warning('已经是最后一首')
+          return playInfo
+        }
+        playInfo.curIndex = playInfo.curIndex + 1
+        console.log('next', playInfo);
+        return playInfo
+      }
+      else {
+        console.log('请先选择音乐');
+      }
+      // play()
+      return playInfo
+    })
   }
   function pre(){
-    console.log('上一首');
-    const copyInfo = JSON.parse(JSON.stringify(playInfo))
-    const length = copyInfo.list.length
-    if(length===0){
-      message.error('请选择音乐文件')
-      return
-    }
-    const curIndex = copyInfo.curIndex
-    if(curIndex < 0 && curIndex >= length){
-      message.error('音乐索引非法')
-      return
-    }
-    if(curIndex === 0){
-      message.warning('当前音乐就是第一首')
-      return
-    }
-    // 下一首
-    copyInfo.curIndex--
-    setPlayinfo(copyInfo)
-    play()
+    setPlayinfo((playInfoRaw)=>{
+      const playInfo = JSON.parse(JSON.stringify(playInfoRaw))
+      console.log('playInfo', playInfo);
+      if(playInfo.list && playInfo.list.length > 0){
+        const length = playInfo.list.length
+        const curIndex = playInfo.curIndex
+        if(curIndex < 0 && curIndex >= length){
+          message.error('音乐索引非法')
+          return playInfo
+        }
+        if(curIndex === 0){
+          message.warning('已经是第一首')
+          return playInfo
+        }
+        playInfo.curIndex = playInfo.curIndex - 1
+        console.log('next', playInfo);
+        return playInfo
+      }
+      else {
+        console.log('请先选择音乐');
+      }
+      // play()
+      return playInfo
+    })
   }
   function handleLike(index, state){ // 设置播放列表的第index个为喜欢或者不喜欢
     const musicId = playInfo.list[index]._id
@@ -186,6 +197,13 @@ function App(props) {
   }
   // 自动播放
 
+  useEffect(()=>{
+    console.log('playInfo list', playInfo);
+    if(playInfo.list.length > 0){
+      console.log('do');
+      play()
+    }
+  }, [playInfo])
 
 
   
@@ -196,7 +214,24 @@ function App(props) {
     }
     audioRef.current.addEventListener('ended', ()=>{
       console.log('播放下一首');
-      next()
+      // 如果当前已经是最后一首了，那就不要播放了
+      new Promise((resolve, reject)=>{
+        setPlayinfo((playInfo)=>{
+          if(playInfo.curIndex === playInfo.list.length - 1){
+            reject()
+            return playInfo
+          }
+          resolve()
+        })
+      })
+      .then(()=>{
+        next()
+      })
+      .catch(()=>{
+        message.warning('已经是最后一首了')
+        pause()
+      })
+      
     })
   }, [])
 
