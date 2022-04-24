@@ -29,6 +29,7 @@ export function Recent(props) {
 
       if(cancel) return
       // 拼接成数组请求数据
+      console.log('userAlbumList', data);
       let recentMusics = data.data?.recentMusicAlbum
       let userAlbumList = data.data?.albumList ?? []
       // 如果最近喜欢的音乐列表在歌单中则去除
@@ -49,7 +50,7 @@ export function Recent(props) {
       Promise.all(promises)
       .then(dataArr=>{
         // dataArr 就是歌单数据列表, 根据这个列表获取歌单数据
-        
+        console.log(dataArr);
         // 解构一下
         dataArr = dataArr.map(item=>{
           item.data.imgUrl = baseUrl + item.data.imgUrl

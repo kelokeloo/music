@@ -77,7 +77,6 @@ export function musicMark(musicId){
  export function albumMark(albumId){
   return http.get(`/api/albumMark/${albumId}`)
   .then(data=>{
-    console.log(data);
     return data
   })
   .catch(e=>{
