@@ -157,11 +157,29 @@ function App(props) {
       // play()
       return playInfo
     })
+    // const copyInfo = JSON.parse(JSON.stringify(playInfo))
+    // const length = copyInfo.list.length
+    // if(length===0){
+    //   message.error('请选择音乐文件')
+    //   return
+    // }
+    // const curIndex = copyInfo.curIndex
+    // if(curIndex < 0 && curIndex >= length){
+    //   message.error('音乐索引非法')
+    //   return
+    // }
+    // if(curIndex === length - 1){
+    //   message.warning('已经是最后一首')
+    //   return
+    // }
+    // // 下一首
+    // copyInfo.curIndex++
+    // setPlayinfo(copyInfo)
+    // play()
   }
   function pre(){
     setPlayinfo((playInfoRaw)=>{
       const playInfo = JSON.parse(JSON.stringify(playInfoRaw))
-      console.log('playInfo', playInfo);
       if(playInfo.list && playInfo.list.length > 0){
         const length = playInfo.list.length
         const curIndex = playInfo.curIndex
@@ -174,7 +192,6 @@ function App(props) {
           return playInfo
         }
         playInfo.curIndex = playInfo.curIndex - 1
-        console.log('next', playInfo);
         return playInfo
       }
       else {
@@ -219,16 +236,18 @@ function App(props) {
         setPlayinfo((playInfo)=>{
           if(playInfo.curIndex === playInfo.list.length - 1){
             reject()
-            return playInfo
           }
-          resolve()
+          else {
+            resolve()
+          }
+          return playInfo
         })
       })
       .then(()=>{
         next()
       })
       .catch(()=>{
-        message.warning('已经是最后一首了')
+        message.warning('已经是最后一首')
         pause()
       })
       
