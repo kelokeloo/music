@@ -184,12 +184,20 @@ function App(props) {
     setPlayinfo(copyPlayInfo)
 
   }
+  // 自动播放
+
+
+
   
   // 真实dom渲染之后
   useEffect(()=>{
     audioRef.current.oncanplay = ()=>{
       console.log('可以播放');
     }
+    audioRef.current.addEventListener('ended', ()=>{
+      console.log('播放下一首');
+      next()
+    })
   }, [])
 
   // 数据改变之后
