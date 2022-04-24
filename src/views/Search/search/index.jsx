@@ -30,24 +30,48 @@ export function Search(props){
     const data = await searchByKey(type, value) // 搜索api
     let { data: list } = data
     // 如果搜索内容type是user，做一下初始化
-    getUserFocusList()
-    .then(({data: focusList})=>{
-      list = list.map(item=>{
-        if(focusList.includes(item._id)){
-          item.focusInitState = true
-        }
-        else {
-          item.focusInitState = false
-        }
-        return item
-      })
-      setShowData({
-        list: list
-      })
-    })
+    switch (type) {
+      case 'user':
+        getUserFocusList()
+        .then(({data: focusList})=>{
+          list = list.map(item=>{
+            if(focusList.includes(item._id)){
+              item.focusInitState = true
+            }
+            else {
+              item.focusInitState = false
+            }
+            return item
+          })
+          setShowData({
+            list: list
+          })
+        })
+        break;
+      case 'music': 
+        list = list.map(item=>{
+          item.imgUrl = baseUrl + item.imgUrl
+          item.musicUrl = baseUrl + item.musicUrl
+          return item
+        })
+        console.log('list', list);
+        setShowData({
+          list: list
+        })
+        break;
+      case 'album':
+        console.log('list', list);
+        list = list.map(item=>{
+          item.imgUrl = baseUrl + item.imgUrl
+          return item
+        })
+        setShowData({
+          list: list
+        })
 
-    // setState
-    
+      default:
+        break;
+    }
 
   }
   // router
@@ -67,6 +91,10 @@ export function Search(props){
   const [type, setType] = useState('music')
 
   function onTabChange(type){
+    // 清空数据
+    setShowData({
+      list: []
+    })
     setType(type)
     doSearch(type, keyWord)
   }
@@ -85,18 +113,16 @@ export function Search(props){
   function CreateItem(props){
     const { type, list } = props
     let result = undefined
+    console.log('list', list);
     switch (type) {
       case 'music':
         if(!list.length) break;
-        result = list.map(item=>{
+        result = list.map((item,index)=>{
           return (
             <MusicItem 
               key={item._id}
-              imgUrl={baseUrl + item.imgUrl} 
-              musicUrl={baseUrl + item.musicUrl} 
-              name={item.name}
-              singer={item.singer}
-              id={item.id}
+              list={list}
+              index={index}
               loadMusic={loadMusic}></MusicItem>
           )
         })
@@ -107,7 +133,7 @@ export function Search(props){
           return (
             <AlbumItem 
               key={item._id}
-              imgUrl={baseUrl + item.imgUrl} 
+              imgUrl={item.imgUrl} 
               title={item.title}
               content={item.content}
               id={item.id}></AlbumItem>

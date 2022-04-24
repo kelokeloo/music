@@ -353,7 +353,7 @@ function App(props) {
                 <Route path='setHeadIcon' element={<SetHeadIcon />}></Route>
               </Route>
 
-              <Route path="search" element={<Search />} />
+              <Route path="search" element={<Search loadMusic={loadMusic}/>} />
             </Route>
             <Route />
             <Route path='/test' element={<Test></Test>}></Route>
