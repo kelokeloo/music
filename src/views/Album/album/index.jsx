@@ -61,10 +61,10 @@ export function Album(props){
   }, [])
 
   // 点击音乐的时候
-  function handleMusicClick(music){
+  function handleMusicClick(music, index){
     // console.log(music);
     musicMark(music.id)
-    loadMusic(music)
+    loadMusic(musicList.list, index)
   }
 
   // 渲染音乐列表
@@ -74,8 +74,8 @@ export function Album(props){
       <List
         bordered
         dataSource={list}
-        renderItem={item => (
-          <List.Item onClick={()=>{handleMusicClick(item)}}>
+        renderItem={(item, index) => (
+          <List.Item onClick={()=>{handleMusicClick(item, index)}}>
             <List.Item.Meta
               avatar={<Avatar src={item.imgUrl} />}
               title={item.name}

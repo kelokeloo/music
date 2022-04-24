@@ -337,7 +337,7 @@ function App(props) {
                 <Route path="add" element={<AddMoment />}></Route>
                 <Route path="detail" element={<MomentDetail />}></Route>
               </Route>
-              <Route path="album/:id" element={<Album />} />
+              <Route path="album/:id" element={<Album loadMusic={loadMusic} />} />
               <Route path="chat" element={<Outlet />} >
                 <Route index element={<Chat unReadMsgData={unReadMsgData}/>}></Route>
                 <Route path='dialog/:dialogId' element={<ChatDialog 
