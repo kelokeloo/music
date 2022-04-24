@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 
 import { FreeMode } from "swiper";
 
-import { getRecentMusic, getAlbumById } from '../../../Api/common/load'
+import { getRecentMusic, getAlbumById, albumMark } from '../../../Api/common/load'
 
 import { baseUrl } from '../../../global.conf'
 
@@ -72,6 +72,7 @@ export function Recent(props) {
   // 处理点击
   const navigateTo = useNavigate()
   function handleAlbumClick(albumId){
+    albumMark(albumId)
     navigateTo(`/album/${albumId}`)
   }
 
