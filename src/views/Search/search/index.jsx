@@ -136,7 +136,7 @@ export function Search(props){
               imgUrl={item.imgUrl} 
               title={item.title}
               content={item.content}
-              id={item.id}></AlbumItem>
+              id={item._id}></AlbumItem>
           )
         })
         break;

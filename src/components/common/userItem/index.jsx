@@ -1,6 +1,6 @@
 import { List, Avatar } from 'antd';
 
-import { setFocusUser } from '../../../Api/common/load'
+import { setFocusUser, getTwoUsersDialogId } from '../../../Api/common/load'
 
 import { useNavigate } from 'react-router';
 import classes from './index.module.scss'
@@ -29,6 +29,15 @@ export function UserItem(props){
     })
     setFocus(state)
   }
+  // 点击聊天
+  function handleChatClick(){
+    console.log('talk', _id);
+    // 获取目标用户的对话框消息
+    getTwoUsersDialogId(_id)
+    .then(data=>{
+      navigateTo(`/chat/dialog/${data.dialogId}`)
+    })
+  }
 
   return (
     <div className={classes.box}>
@@ -37,7 +46,9 @@ export function UserItem(props){
         <span>{username}</span>
       </div>
       <div className={classes.options}>
-        <WechatOutlined className={classes.iconStyle}/>
+        <WechatOutlined className={classes.iconStyle}
+          onClick={handleChatClick}
+        />
         <span onClick={handleFocusClick}>
         {
           !focus ? <span className={classes.focus}>关注</span> : <span className={classes.defocus}>已关注</span>

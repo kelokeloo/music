@@ -295,6 +295,18 @@ export function setUserReadMsg(dialogId){
   })
 }
 
+/**
+ * 获取与目标用户的对话框
+ */
+
+export function getTwoUsersDialogId(targetId){
+  return http.get('/api/dialogId', {
+    params: {
+      targetId
+    }
+  })
+}
+
 
 
 
