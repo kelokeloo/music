@@ -6,15 +6,16 @@ import { UserOutlined,SettingOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react'
 
 import { TokenTest } from '../../../components/common/tokenTest'
-import { getUserInfo } from '../../../Api/common/load'
+import { getUserInfo, getMusicById } from '../../../Api/common/load'
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../../../global.conf';
+import { MusicItem  } from '../../../components/common/musicItem'
 
 export function Me(props){
-  const { setLogin } = props
+  const { setLogin, loadMusic } = props
   const userId = window.sessionStorage.getItem('userid')
   const name = window.sessionStorage.getItem('username')
   const headIcon = window.sessionStorage.getItem('headIcon')
-  const attention = 36
   const fans = 99
   const like = 120
 
@@ -27,13 +28,37 @@ export function Me(props){
   
   // 
   const [focus, setFocus] = useState(0)
+  const [likeMusics, setLikeMusics] = useState({
+    list: []
+  })
 
   useEffect(()=>{
     getUserInfo(userId)
-    .then(({userInfo})=>{
+    .then(async({userInfo})=>{
       setFocus(userInfo.userFocusList.length)
+      let musicInfolistPromises = userInfo.likeMusics.map((musicId)=>{
+        return getMusicById(musicId)
+      })
+      let musicInfolist = await Promise.all(musicInfolistPromises)
+      // 解构
+      musicInfolist = musicInfolist.map(item=>{
+        item.data.imgUrl = baseUrl + item.data.imgUrl
+        item.data.musicUrl = baseUrl + item.data.musicUrl
+        return item.data
+      })
+
+      console.log('musicInfolist', musicInfolist);
+      setLikeMusics({
+        list: musicInfolist
+      })
     })
+    
   }, [])
+
+  useEffect(()=>{
+    console.log('likeMusics', likeMusics.list);
+  }, [likeMusics])
+
 
   const navigateTo = useNavigate()
   function logout(){
@@ -48,17 +73,24 @@ export function Me(props){
         <Avatar size={64} icon={<UserOutlined />} src={headIcon}></Avatar>
         <div className={classes.name}><h1>{name}</h1></div>
         <div className={classes.data}>
-          <span>{attention} 关注</span>
-          <span>{fans} 粉丝</span>
-          <span>{like} 喜欢</span>
+          <span>{focus} 关注</span>
         </div>
       </div>
       <div className={classes.likeMusic}>
         
         <Card title={<Title label="喜欢的音乐"></Title>}>
-          <p>Card content</p>
-          <p>Card content</p>
-          <p>Card content</p>
+          {
+            likeMusics.list.map((item, index)=>{
+              return (
+                <MusicItem
+                  key={item._id}
+                  list={likeMusics.list}
+                  index={index}
+                  loadMusic={loadMusic}
+                ></MusicItem>
+              )
+            })
+          }
         </Card>
       </div>
       <div className={classes.setting}>

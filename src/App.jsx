@@ -309,6 +309,7 @@ function App(props) {
     // 首次加载的时候，获取未读数据
     getAllDialogUnreadMsg()
     .then(data=>{
+      console.log('data', data);
       setUnReadMsgData({
         list: data
       })
@@ -416,7 +417,7 @@ function App(props) {
                 />}></Route>
               </Route>
               <Route path="me" element={<Outlet />} >
-                <Route index element={<Me setLogin={setLogin}/>}></Route>
+                <Route index element={<Me setLogin={setLogin} loadMusic={loadMusic} />}></Route>
                 <Route path='setPassword' element={<SetPassword />}></Route>
                 <Route path='setHeadIcon' element={<SetHeadIcon />}></Route>
               </Route>
