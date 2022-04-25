@@ -93,7 +93,7 @@ export function Recent(props) {
           dataArr.list.map(item=>{
             return (
               <SwiperSlide className={classes.swiperSlide} key={item._id}>
-                <div className={classes.swiperItem} onClick={()=>handleAlbumClick(item.id)}>
+                <div className={classes.swiperItem} onClick={()=>handleAlbumClick(item._id)}>
                   <img src={item.imgUrl}/>
                   <p>{item.title}</p>
                 </div>

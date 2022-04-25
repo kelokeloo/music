@@ -1,12 +1,12 @@
 import { List, Avatar } from 'antd';
 import classes from './index.module.scss'
-import { musicMark } from '../../../Api/common/load'
+// import { musicMark } from '../../../Api/common/load'
 
 export function MusicItem(props){
   const { list, index, loadMusic} = props
   function handleClick(){
     loadMusic(list, index)
-    musicMark(list[index].id)
+    // musicMark(list[index].id)
   }
 
   return (

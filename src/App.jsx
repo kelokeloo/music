@@ -38,6 +38,7 @@ import { baseUrl } from './global.conf';
 
 import { message } from 'antd';
 import { setUserLikeMusic, getAllDialogUnreadMsg } from './Api/common/load'
+import { musicMark } from './Api/common/load'
 
 
 
@@ -216,6 +217,11 @@ function App(props) {
 
   useEffect(()=>{
     console.log('playInfo list', playInfo);
+    // 标记音乐
+    if(playInfo.curIndex>=0){
+      musicMark(playInfo.list[playInfo.curIndex].id)
+    }
+
     if(playInfo.list.length > 0){
       console.log('do');
       play()

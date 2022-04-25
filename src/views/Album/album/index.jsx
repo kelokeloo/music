@@ -11,7 +11,7 @@ import { List,Avatar  } from 'antd';
 
 import { TokenTest } from '../../../components/common/tokenTest'
 // mark
-import { musicMark } from '../../../Api/common/load'
+// import { musicMark } from '../../../Api/common/load'
 
 import {
   ArrowLeftOutlined
@@ -37,6 +37,7 @@ export function Album(props){
   // 获取album 数据
   useEffect(async ()=>{
     const {data} = await getAlbumById(id)
+    console.log('album', data);
     data.imgUrl = baseUrl + data.imgUrl
 
 
@@ -63,7 +64,7 @@ export function Album(props){
   // 点击音乐的时候
   function handleMusicClick(music, index){
     // console.log(music);
-    musicMark(music.id)
+    // musicMark(music.id)
     loadMusic(musicList.list, index)
   }
 
