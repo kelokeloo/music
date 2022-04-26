@@ -20,6 +20,7 @@ import { ChatDialog } from './views/Chat/chatDialog'
 import { Test } from './views/test'
 import { SetPassword } from './views/Me/setPassword'
 import { SetHeadIcon } from './views/Me/setHeadIcon';
+import { LikeMusics } from './views/Me/likeMusics';
 
 // footerNav
 import { Nav } from './components/nav'
@@ -420,6 +421,7 @@ function App(props) {
                 <Route index element={<Me setLogin={setLogin} loadMusic={loadMusic} />}></Route>
                 <Route path='setPassword' element={<SetPassword />}></Route>
                 <Route path='setHeadIcon' element={<SetHeadIcon />}></Route>
+                <Route path='LikeMusics' element={<LikeMusics loadMusic={loadMusic} />}></Route>
               </Route>
 
               <Route path="search" element={<Search loadMusic={loadMusic}/>} />

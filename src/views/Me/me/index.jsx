@@ -48,6 +48,10 @@ export function Me(props){
       })
 
       console.log('musicInfolist', musicInfolist);
+      if(musicInfolist.length > 5){
+        musicInfolist.splice(5)
+      }
+
       setLikeMusics({
         list: musicInfolist
       })
@@ -67,6 +71,10 @@ export function Me(props){
     navigateTo('/login')
   }
 
+  function handleMoreClick(){
+    navigateTo('/me/LikeMusics')
+  }
+
   return (
     <div className={classes.box}>
       <div className={classes.info}>
@@ -78,7 +86,7 @@ export function Me(props){
       </div>
       <div className={classes.likeMusic}>
         
-        <Card title={<Title label="喜欢的音乐"></Title>}>
+        <Card title={<Title label="喜欢的音乐"></Title>} extra={<div onClick={()=>handleMoreClick()}>更多</div>}>
           {
             likeMusics.list.map((item, index)=>{
               return (

@@ -1,0 +1,18 @@
+@import '../../../css/global.scss';
+.header {
+  display: flex;
+  align-items: center;
+  padding: .5rem 1rem;
+  border-bottom: 1px solid $lineColor;
+}
+
+.iconStyle {
+  font-size: $IconSize;
+  margin-right: 1rem;
+  svg {
+    color: $themeColor;
+  }
+}
+.main {
+  padding: .8rem;
+}

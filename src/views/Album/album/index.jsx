@@ -45,10 +45,12 @@ export function Album(props){
       info: data
     })
     // 获取歌单的所有音乐
+    console.log('musicList', data.musicList);
     const promises =  data.musicList.map(item=>{
       return getMusicById(item)
     })
     let datas = await Promise.all(promises)
+    console.log('datas', datas);
     // 数据转换一下
     datas = datas.map(item=>{
       item.data.imgUrl = baseUrl + item.data.imgUrl
