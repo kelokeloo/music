@@ -36,7 +36,9 @@ export function Album(props){
 
   // 获取album 数据
   useEffect(async ()=>{
+    let cancel = false
     const {data} = await getAlbumById(id)
+    if(cancel) return
     console.log('album', data);
     data.imgUrl = baseUrl + data.imgUrl
 
@@ -50,6 +52,7 @@ export function Album(props){
       return getMusicById(item)
     })
     let datas = await Promise.all(promises)
+    if(cancel) return
     console.log('datas', datas);
     // 数据转换一下
     datas = datas.map(item=>{
@@ -60,7 +63,9 @@ export function Album(props){
     setMusicList({
       list: datas
     })
-
+    return ()=>{
+      cancel = true
+    }
   }, [])
 
   // 点击音乐的时候

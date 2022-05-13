@@ -33,8 +33,10 @@ export function Me(props){
   })
 
   useEffect(()=>{
+    let cancel = false
     getUserInfo(userId)
     .then(async({userInfo})=>{
+      if(cancel) return
       setFocus(userInfo.userFocusList.length)
       let musicInfolistPromises = userInfo.likeMusics.map((musicId)=>{
         return getMusicById(musicId)
@@ -56,7 +58,9 @@ export function Me(props){
         list: musicInfolist
       })
     })
-    
+    return ()=>{
+      cancel = true
+    }
   }, [])
 
   useEffect(()=>{

@@ -29,6 +29,7 @@ export function Range(props){
         item.musicUrl = baseUrl + item.musicUrl
         return item
       })
+      console.log('rangeres', res);
       setData({
         list: resList
       })

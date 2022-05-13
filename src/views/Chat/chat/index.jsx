@@ -23,8 +23,10 @@ export function Chat(props){
   })
   // 获取对话列表
   useEffect(()=>{
+    let cancel = false
     getChatList()
     .then(({chatList:chatListRaw})=>{
+      if(cancel) return
       // 获取对话框相关数据
       let chatRelateInfo = chatListRaw.map((item)=>{
         const {include, messages, _id} = item
@@ -56,6 +58,7 @@ export function Chat(props){
         // 获取targetUserId的头像，以及用户信息
         return getUserInfo(targetUserId)
         .then(res=>{
+          if(cancel) return
           return {
             username: res.userInfo.username,
             headIcon: baseUrl + res.userInfo.headIcon,
@@ -69,11 +72,15 @@ export function Chat(props){
       // 处理对话列表数据
     })
     .then(list=>{
+      if(cancel) return
       // 拿到并处理好相关数据,设置状态
       setChatList({
         list: list
       })
     })
+    return ()=>{
+      cancel = true
+    }
   }, [])
 
 

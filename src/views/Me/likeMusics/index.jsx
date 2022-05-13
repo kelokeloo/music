@@ -21,8 +21,10 @@ export function LikeMusics(props){
   })
 
   useEffect(()=>{
+    let cancel = false
     getUserInfo(userId)
     .then(async({userInfo})=>{
+      if(cancel) return
       let musicInfolistPromises = userInfo.likeMusics.map((musicId)=>{
         return getMusicById(musicId)
       })
@@ -41,7 +43,9 @@ export function LikeMusics(props){
         list: musicInfolist
       })
     })
-    
+    return ()=>{
+      cancel = true
+    }
   }, [])
 
 

@@ -159,25 +159,6 @@ function App(props) {
       // play()
       return playInfo
     })
-    // const copyInfo = JSON.parse(JSON.stringify(playInfo))
-    // const length = copyInfo.list.length
-    // if(length===0){
-    //   message.error('请选择音乐文件')
-    //   return
-    // }
-    // const curIndex = copyInfo.curIndex
-    // if(curIndex < 0 && curIndex >= length){
-    //   message.error('音乐索引非法')
-    //   return
-    // }
-    // if(curIndex === length - 1){
-    //   message.warning('已经是最后一首')
-    //   return
-    // }
-    // // 下一首
-    // copyInfo.curIndex++
-    // setPlayinfo(copyInfo)
-    // play()
   }
   function pre(){
     setPlayinfo((playInfoRaw)=>{
@@ -233,6 +214,7 @@ function App(props) {
   
   // 真实dom渲染之后
   useEffect(()=>{
+    let cancel = false
     audioRef.current.oncanplay = ()=>{
       console.log('可以播放');
     }
@@ -251,13 +233,16 @@ function App(props) {
         })
       })
       .then(()=>{
+        if(cancel) return
         next()
       })
       .catch(()=>{
         message.warning('已经是最后一首')
         pause()
       })
-      
+      return ()=>{
+        cancel = true
+      }
     })
   }, [])
 
@@ -299,6 +284,7 @@ function App(props) {
   }
 
   useEffect(()=>{
+    let cancel = false
     // 加载的时候, 判断是否登录
     const loginId = window.sessionStorage.getItem('userid')
     if(loginId){
@@ -310,11 +296,15 @@ function App(props) {
     // 首次加载的时候，获取未读数据
     getAllDialogUnreadMsg()
     .then(data=>{
+      if(cancel) return
       console.log('data', data);
       setUnReadMsgData({
         list: data
       })
     })
+    return ()=>{
+      cancel = true
+    }
 
   }, [])
   useEffect(()=>{

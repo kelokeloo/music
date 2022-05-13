@@ -25,8 +25,10 @@ export function Moment(){
   })
 
   useEffect(()=>{
+    let cancel = false
     getMoments()
     .then(data=>{
+      if(cancel) return
       let list = data.moments
       // 数据处理 添加baseUrl
       list = list.map(item=>{
@@ -40,6 +42,9 @@ export function Moment(){
         list
       })
     })
+    return ()=>{
+      cancel = true
+    }
   }, [])
 
 
